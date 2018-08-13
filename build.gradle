@@ -1,0 +1,27 @@
+plugins {
+  id 'org.springframework.boot' version '2.0.4.RELEASE'
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+jar {
+  baseName = 'life-booster'
+  version = '0.0.2-SNAPSHOT'
+}
+
+repositories {
+  jcenter()
+  mavenLocal()
+  maven { url 'https://repo.spring.io/snapshot' }
+  maven { url 'https://repo.spring.io/milestone' }
+}
+
+dependencies {
+  implementation('org.apache.httpcomponents:httpclient')
+  implementation('org.visola.spring.security:spring-security-token-filter-spring-boot-starter:2.0')
+  implementation('org.springframework.boot:spring-boot-starter-security')
+  implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
+  implementation('org.springframework.boot:spring-boot-starter-web')
+}

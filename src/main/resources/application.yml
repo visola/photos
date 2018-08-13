@@ -1,0 +1,8 @@
+api.base.path: /api/v1
+
+security.token.filter.secret: not-a-very-good-secret-but-very-long-very-long
+
+oauth.google:
+  clientId: google-client-id
+  clientSecret: google-client-secret
+  redirectUri: http://localhost:8080/authenticate/oauth2callback

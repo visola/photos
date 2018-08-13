@@ -1,0 +1,11 @@
+/application.yml
+build/
+.classpath
+.gradle/
+.idea/
+*.iml
+node_modules/
+out/
+.project
+.settings/
+.vscode/
