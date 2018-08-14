@@ -2,13 +2,34 @@
   "name": "life-booster",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "parcel watch -d build/frontend/static --public-url / src/main/frontend/html/index.html"
   },
   "dependencies": {
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2"
+    "@material-ui/core": "^1.5.0",
+    "@material-ui/icons": "^2.0.2",
+    "axios": "^0.18.0",
+    "babel-preset-env": "^1.7.0",
+    "mobx": "^5.0.3",
+    "mobx-react": "^5.2.5",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2"
   },
   "devDependencies": {
-    "parcel-bundler": "^1.7.1"
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.5",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "parcel-bundler": "^1.9.7"
+  },
+  "babel": {
+    "presets": [
+      "env",
+      "react",
+      "stage-2"
+    ],
+    "plugins": [
+      "transform-decorators-legacy",
+      "transform-class-properties"
+    ]
   }
 }

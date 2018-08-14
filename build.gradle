@@ -1,9 +1,9 @@
 plugins {
+  id "com.moowork.node" version "1.2.0"
   id 'org.springframework.boot' version '2.0.4.RELEASE'
 }
 
 apply plugin: 'java'
-apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 jar {
@@ -25,3 +25,20 @@ dependencies {
   implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
   implementation('org.springframework.boot:spring-boot-starter-web')
 }
+
+sourceSets {
+  main {
+    resources {
+      srcDir "${buildDir}/frontend"
+    }
+  }
+}
+
+task bundleFrontend (type: NpmTask) {
+  dependsOn npmInstall
+  args = ["run", "bundleProd"]
+  inputs.dir file("src/frontend")
+  outputs.dir file("${buildDir}/frontend/static")
+}
+
+processResources.dependsOn bundleFrontend

@@ -20,6 +20,7 @@ public class WebConfiguration implements WebMvcConfigurer {
             "/**/*.html",
             "/**/*.js",
             "/**/*.jsx",
+            "/**/*.map",
             "/**/*.png",
             "/**/*.ttf",
             "/**/*.woff",
