@@ -3,12 +3,12 @@ import React from 'react';
 import { render } from 'react-dom';
 import stores from './stores';
 
+import Routes from './containers/Routes';
+
 const ApplicationWithState = () => (
   <Provider {...stores}>
-    <p>Hello world!</p>
+    <Routes />
   </Provider>
 );
-
-console.log(`Is logged in: ${stores.security.isLoggedIn}`);
 
 render(<ApplicationWithState />, document.getElementById('container'));

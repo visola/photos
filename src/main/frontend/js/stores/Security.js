@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { action, computed, observable } from 'mobx';
 
-const ONE_MINUTE = 3600 * 1000;
+const ONE_MINUTE = 60 * 1000;
 const TEN_MINUTES = 10 * ONE_MINUTE;
 
 export default class Security {
