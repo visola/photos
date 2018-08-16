@@ -1,8 +1,11 @@
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import JournalEntryForm from './JournalEntryForm';
 import Login from './Login';
+import TopMenu from './TopMenu';
 
 @inject('security')
 @observer
@@ -16,6 +19,12 @@ export default class Routes extends React.Component {
       return <Login />;
     }
 
-    return <p>Hello world</p>;
+    return <React.Fragment>
+      <CssBaseline />
+      <TopMenu />
+      <div id="content">
+        <JournalEntryForm />
+      </div>
+    </React.Fragment>;
   }
 }
