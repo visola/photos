@@ -19,11 +19,18 @@ repositories {
 }
 
 dependencies {
+  compileOnly('org.projectlombok:lombok:1.18.2')
+
+  implementation('mysql:mysql-connector-java')
   implementation('org.apache.httpcomponents:httpclient')
-  implementation('org.visola.spring.security:spring-security-token-filter-spring-boot-starter:2.0')
+  implementation('org.flywaydb:flyway-core')
+  implementation('org.jdbi:jdbi3-core:3.4.0')
+  implementation('org.jdbi:jdbi3-sqlobject:3.4.0')
+  implementation('org.springframework.boot:spring-boot-starter-jdbc')
   implementation('org.springframework.boot:spring-boot-starter-security')
   implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
   implementation('org.springframework.boot:spring-boot-starter-web')
+  implementation('org.visola.spring.security:spring-security-token-filter-spring-boot-starter:2.0')
 }
 
 sourceSets {

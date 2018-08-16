@@ -1,0 +1,5 @@
+CREATE TABLE journal_entry (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  entry VARCHAR(1024) NOT NULL,
+  date BIGINT
+);
