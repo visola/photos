@@ -43,7 +43,7 @@ sourceSets {
 
 task bundleFrontend (type: NpmTask) {
   dependsOn npmInstall
-  args = ["run", "bundleProd"]
+  args = ["run", "bundle"]
   inputs.dir file("src/frontend")
   outputs.dir file("${buildDir}/frontend/static")
 }
