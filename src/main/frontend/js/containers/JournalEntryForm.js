@@ -1,11 +1,6 @@
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
+import { Button, Card, Input } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
 
 @inject('journalEntries')
 @observer
@@ -30,25 +25,21 @@ export default class JournalEntryForm extends React.Component {
 
   render() {
     return <Card className="journal-entry-card">
-      <CardHeader title="Positivity Journal" subheader="Write something positive to remember!"/>
-      <CardContent>
-        <TextField
-          fullWidth={true}
-          label="Entry"
-          multiline={true}
+      <Card.Content>
+        <Card.Header>Positivity Journal</Card.Header>
+      </Card.Content>
+      <Card.Content>
+        <Input
+          fluid
           onChange={this.handleEntryChange}
           value={this.state.entry}
         />
-      </CardContent>
-      <CardActions>
-        <Button
-          color="primary"
-          onClick={this.handleSave}
-          variant="contained"
-        >
+      </Card.Content>
+      <Card.Content extra>
+        <Button onClick={this.handleSave}>
           Save
         </Button>
-      </CardActions>
+      </Card.Content>
     </Card>;
   }
 }
