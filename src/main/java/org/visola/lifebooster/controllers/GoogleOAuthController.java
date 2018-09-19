@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.visola.lifebooster.dao.UserDao;
 import org.visola.spring.security.tokenfilter.TokenService;
 
 import javax.servlet.http.Cookie;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -54,12 +56,13 @@ public class GoogleOAuthController {
   private final HttpClient httpClient;
   private final ObjectMapper objectMapper;
   private final TokenService tokenService;
-  private final Set<String> emails = new HashSet<>();
+  private final UserDao userDao;
 
   @Autowired
   public GoogleOAuthController(HttpClient httpClient,
                                ObjectMapper objectMapper,
                                TokenService tokenService,
+                               UserDao userDao,
                                @Value("${oauth.google.clientId}") String clientId,
                                @Value("${oauth.google.clientSecret}") String clientSecret,
                                @Value("${oauth.google.redirectUri}") String redirectUri) {
@@ -69,6 +72,7 @@ public class GoogleOAuthController {
     this.httpClient = httpClient;
     this.objectMapper = objectMapper;
     this.tokenService = tokenService;
+    this.userDao = userDao;
   }
 
   @RequestMapping(method= RequestMethod.GET, value="/authenticate/google")
@@ -108,15 +112,21 @@ public class GoogleOAuthController {
     }
 
     String email = getUserEmail(getToken(code));
-
-    if (!emails.contains(email)) {
-      emails.add(email);
+    org.visola.lifebooster.model.User user = null;
+    Optional<org.visola.lifebooster.model.User> maybeUser = userDao.findByEmail(email);
+    if (maybeUser.isPresent()) {
+      user = maybeUser.get();
+    } else {
+      user = new org.visola.lifebooster.model.User();
+      user.setId(UUID.randomUUID());
+      user.setEmail(email);
+      userDao.create(user.getId().toString(), user.getEmail());
     }
 
     String token = tokenService.generateToken(new UsernamePasswordAuthenticationToken(new User(email, "", Arrays.asList(ROLES)), ""));
 
     ModelAndView mv = new ModelAndView("/oauth2callback");
-    mv.addObject("email", email);
+    mv.addObject("user", user);
     mv.addObject("token", token);
     return mv;
   }

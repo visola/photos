@@ -7,6 +7,7 @@ import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.visola.lifebooster.dao.JournalEntryDao;
+import org.visola.lifebooster.dao.UserDao;
 
 @Configuration
 public class JDBIConfiguration {
@@ -21,6 +22,11 @@ public class JDBIConfiguration {
   @Bean
   public JournalEntryDao journalEntryDao(Jdbi jdbi) {
     return jdbi.onDemand(JournalEntryDao.class);
+  }
+
+  @Bean
+  public UserDao userDao(Jdbi jdbi) {
+    return jdbi.onDemand(UserDao.class);
   }
 
 }
