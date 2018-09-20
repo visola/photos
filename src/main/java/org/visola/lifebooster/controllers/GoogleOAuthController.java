@@ -13,7 +13,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.visola.lifebooster.dao.UserDao;
+import org.visola.lifebooster.security.UserAuthentication;
 import org.visola.spring.security.tokenfilter.TokenService;
 
 import javax.servlet.http.Cookie;
@@ -32,10 +32,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -120,10 +118,10 @@ public class GoogleOAuthController {
       user = new org.visola.lifebooster.model.User();
       user.setId(UUID.randomUUID());
       user.setEmail(email);
-      userDao.create(user.getId().toString(), user.getEmail());
+      userDao.create(user);
     }
 
-    String token = tokenService.generateToken(new UsernamePasswordAuthenticationToken(new User(email, "", Arrays.asList(ROLES)), ""));
+    String token = tokenService.generateToken(new UserAuthentication(user));
 
     ModelAndView mv = new ModelAndView("/oauth2callback");
     mv.addObject("user", user);
