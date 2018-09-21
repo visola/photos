@@ -2,7 +2,6 @@ import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import JournalEntryForm from './JournalEntryForm';
 import Login from './Login';
 import TopMenu from './TopMenu';
 
@@ -21,7 +20,7 @@ export default class Routes extends React.Component {
     return <React.Fragment>
       <TopMenu />
       <div id="content">
-        <JournalEntryForm />
+        <p>You're awesome!</p>
       </div>
     </React.Fragment>;
   }
