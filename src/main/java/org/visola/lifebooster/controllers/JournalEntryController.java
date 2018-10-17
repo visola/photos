@@ -31,8 +31,8 @@ public class JournalEntryController {
   }
 
   @GetMapping
-  public List<JournalEntry> getEntries() {
-    return journalEntryDao.list();
+  public List<JournalEntry> getEntries(@AuthenticationPrincipal User user) {
+    return journalEntryDao.list(user.getId());
   }
 
 }
