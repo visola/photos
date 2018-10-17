@@ -7,7 +7,7 @@ import TopMenu from './TopMenu';
 
 @inject('security')
 @observer
-export default class Routes extends React.Component {
+export default class Application extends React.Component {
   static propTypes = {
     security: PropTypes.object.isRequired,
   }
