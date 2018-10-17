@@ -3,11 +3,11 @@ import React from 'react';
 import { render } from 'react-dom';
 import stores from './stores';
 
-import Routes from './containers/Routes';
+import Application from './containers/Application';
 
 const ApplicationWithState = () => (
   <Provider {...stores}>
-    <Routes />
+    <Application />
   </Provider>
 );
 
