@@ -6,18 +6,18 @@ import JournalEntryForm from './JournalEntryForm';
 
 export default class TopMenu extends React.Component {
   render() {
+    const items = [
+      { key: "home", path: "/", label: "Life Booster" },
+      { key: "projects", path: "/projects", label: "Projects" },
+    ];
+
     return <Menu stackable>
-      <Menu.Item>
-        <Link to="/">Life Booster</Link>
-      </Menu.Item>
-
-      <Menu.Item>
-        <JournalEntryForm />
-      </Menu.Item>
-
-      <Menu.Item>
-        <Link to="/projects">Projects</Link>
-      </Menu.Item>
+      {items.map((item) => {
+        const active = location.pathname === item.path;
+        return <Menu.Item key={item.key} active={active}>
+          <Link to={item.path}>{item.label}</Link>
+        </Menu.Item>
+      })}
     </Menu>
   }
 }
