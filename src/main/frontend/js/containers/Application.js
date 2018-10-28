@@ -1,8 +1,12 @@
+import { BrowserRouter, Route, withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import Home from './Home';
 import Login from './Login';
+import ProjectForm from './ProjectForm';
+import Projects from './Projects';
 import TopMenu from './TopMenu';
 
 @inject('security')
@@ -17,11 +21,15 @@ export default class Application extends React.Component {
       return <Login />;
     }
 
-    return <React.Fragment>
-      <TopMenu />
-      <div id="content">
-        <p>You're awesome!</p>
-      </div>
-    </React.Fragment>;
+    return <BrowserRouter>
+      <React.Fragment>
+        <TopMenu />
+        <div id="content">
+          <Route exact path="/" component={Home} />
+          <Route exact path="/projects" component={Projects} />
+          <Route exact path="/projects/:projectId" component={withRouter(ProjectForm)} />
+        </div>
+      </React.Fragment>
+    </BrowserRouter>;
   }
 }

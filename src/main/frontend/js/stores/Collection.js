@@ -3,6 +3,7 @@ import { action, computed, observable } from 'mobx';
 
 export default class Collection {
   @observable data = [];
+  @observable loading = false;
 
   get baseApi() {
     throw new Error('No base API defined');
@@ -13,25 +14,42 @@ export default class Collection {
     this.data.push(datum);
   }
 
+  @action
   create(datum) {
+    this.loading = true;
     return axios.post(this.baseApi, datum)
       .then((response) => {
         this.addOne(response.data);
+        this.loading = false;
         return this;
       });
   }
 
   fetch() {
+    this.loading = true;
     return axios.get(this.baseApi)
       .then((response) => {
         this.setData(response.data);
+        this.loading = false;
         return this;
       });
+  }
+
+  findById(id) {
+    return this.data.find((d) => d.id == id);
   }
 
   @computed
   get length() {
     return this.data.length;
+  }
+
+  @action
+  saveOne(datum) {
+    if (datum.id == null) {
+      return this.create(datum);
+    }
+    return this.update(datum);
   }
 
   @action
