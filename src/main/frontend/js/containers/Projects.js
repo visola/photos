@@ -16,16 +16,19 @@ export default class Projects extends React.Component {
       return <p>Loading...</p>;
     }
 
-    return <Table>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Name</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
-      <Table.Body>
-        {data.map((p) => this.renderProject(p))}
-      </Table.Body>
-    </Table>;
+    return <React.Fragment>
+      <Link to="/projects/new">Create New</Link>
+      <Table collapsing>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Name</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {data.map((p) => this.renderProject(p))}
+        </Table.Body>
+      </Table>
+    </React.Fragment>
   }
 
   renderProject(p) {

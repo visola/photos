@@ -1,4 +1,4 @@
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, withRouter } from 'react-router-dom'
 import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -27,7 +27,7 @@ export default class Application extends React.Component {
         <div id="content">
           <Route exact path="/" component={Home} />
           <Route exact path="/projects" component={Projects} />
-          <Route exact path="/projects/:projectId" component={ProjectForm} />
+          <Route exact path="/projects/:projectId" component={withRouter(ProjectForm)} />
         </div>
       </React.Fragment>
     </BrowserRouter>;
