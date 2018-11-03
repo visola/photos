@@ -26,7 +26,7 @@ public class UserAuthenticationJwtClaimsSetTransformer implements
         .subject(user.getEmail())
         .issueTime(new Date(now))
         .expirationTime(new Date(now + TOKEN_DURATION))
-        .claim("id", user.getId().toString())
+        .claim("id", Long.toString(user.getId()))
         .build();
   }
 
@@ -35,7 +35,7 @@ public class UserAuthenticationJwtClaimsSetTransformer implements
     try {
       User user = new User();
       user.setEmail(claimSet.getSubject());
-      user.setId(UUID.fromString(claimSet.getStringClaim(CLAIM_ID)));
+      user.setId(Long.parseLong(claimSet.getStringClaim(CLAIM_ID)));
 
       return new UserAuthentication(user);
     } catch (ParseException e) {

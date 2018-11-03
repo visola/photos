@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.visola.lifebooster.dao.JournalEntryDao;
 import org.visola.lifebooster.dao.ProjectDao;
-import org.visola.lifebooster.dao.UUIDArgumentFactory;
 import org.visola.lifebooster.dao.UserDao;
 
 @Configuration
@@ -18,7 +17,6 @@ public class JDBIConfiguration {
   public Jdbi jdbi(DataSource dataSource) {
     Jdbi jdbi = Jdbi.create(dataSource);
     jdbi.installPlugin(new SqlObjectPlugin());
-    jdbi.registerArgument(new UUIDArgumentFactory());
     return jdbi;
   }
 
