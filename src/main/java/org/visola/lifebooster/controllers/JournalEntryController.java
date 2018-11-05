@@ -35,4 +35,9 @@ public class JournalEntryController {
     return journalEntryDao.list(user.getId());
   }
 
+  @GetMapping("/dates")
+  public List<Long> getEntryDates(@AuthenticationPrincipal User user) {
+    return journalEntryDao.fetchEntrtDates(user.getId());
+  }
+
 }

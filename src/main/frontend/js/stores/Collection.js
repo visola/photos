@@ -25,6 +25,10 @@ export default class Collection {
       });
   }
 
+  filter(callback) {
+    return this.data.filter(callback);
+  }
+
   fetch() {
     this.loading = true;
     return axios.get(this.baseApi)
@@ -42,6 +46,11 @@ export default class Collection {
   @computed
   get length() {
     return this.data.length;
+  }
+
+  @computed
+  get isEmpty() {
+    return this.length === 0;
   }
 
   @action
