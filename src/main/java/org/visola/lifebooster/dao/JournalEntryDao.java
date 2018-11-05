@@ -17,8 +17,11 @@ public interface JournalEntryDao {
       + " VALUES (:entry, :date, :userId)")
   long create(@BindBean JournalEntry journalEntry);
 
+  @SqlQuery("SELECT date FROM journal_entry WHERE user_id = :userId")
+  List<Long> fetchEntrtDates(@Bind("userId") long userId);
+
   @RegisterBeanMapper(JournalEntry.class)
-  @SqlQuery("SELECT id, entry, date, BIN_TO_UUID(user_id) AS user_id"
+  @SqlQuery("SELECT id, entry, date, user_id"
       + " FROM journal_entry"
       + " WHERE user_id = :userId")
   List<JournalEntry> list(@Bind("userId") long userId);

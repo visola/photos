@@ -31,7 +31,8 @@ export default class JournalEntryForm extends React.Component {
   handleSave() {
     this.setState({ saving: true });
     this.props.journalEntries.create({entry: this.state.entry, date: Date.now()})
-      .then(() => this.setState({ saving: false }));
+      .then(() => this.setState({ saving: false }))
+      .then(() => this.triggerOnSave());
     this.setState({ entry: '' });
   }
 
@@ -47,5 +48,12 @@ export default class JournalEntryForm extends React.Component {
       loading={saving}
       value={entry}
     />
+  }
+
+  triggerOnSave() {
+    const { onSave } = this.props;
+    if (onSave) {
+      onSave();
+    }
   }
 }
