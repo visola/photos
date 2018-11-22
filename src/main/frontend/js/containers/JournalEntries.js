@@ -80,7 +80,9 @@ export default class JournalEntries extends React.Component {
   renderGrid() {
     const days = this.getDays();
     return <Table collapsing>
-      {days.map(week => this.renderWeek(week))}
+      <Table.Body>
+        {days.map(week => this.renderWeek(week))}
+      </Table.Body>
     </Table>;
   }
 

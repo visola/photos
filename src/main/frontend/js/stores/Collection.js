@@ -53,6 +53,10 @@ export default class Collection {
     return this.length === 0;
   }
 
+  map(callback) {
+    return this.data.map(callback);
+  }
+
   @action
   saveOne(datum) {
     if (datum.id == null) {
