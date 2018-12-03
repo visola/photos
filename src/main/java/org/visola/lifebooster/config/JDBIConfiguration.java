@@ -6,6 +6,7 @@ import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.visola.lifebooster.dao.HabitDao;
 import org.visola.lifebooster.dao.JournalEntryDao;
 import org.visola.lifebooster.dao.ProjectDao;
 import org.visola.lifebooster.dao.UserDao;
@@ -18,6 +19,11 @@ public class JDBIConfiguration {
     Jdbi jdbi = Jdbi.create(dataSource);
     jdbi.installPlugin(new SqlObjectPlugin());
     return jdbi;
+  }
+
+  @Bean
+  public HabitDao habitDao(Jdbi jdbi) {
+    return jdbi.onDemand(HabitDao.class);
   }
 
   @Bean

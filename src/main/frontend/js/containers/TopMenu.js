@@ -2,13 +2,12 @@ import { Link } from 'react-router-dom'
 import { Menu } from 'semantic-ui-react';
 import React from 'react';
 
-import JournalEntryForm from './JournalEntryForm';
-
 export default class TopMenu extends React.Component {
   render() {
     const items = [
       { path: "/", label: "Life Booster" },
       { path: "/journal-entries", label: "Journal Entries" },
+      { path: "/habits", label: "Habits" },
       { path: "/projects", label: "Projects" },
     ];
 

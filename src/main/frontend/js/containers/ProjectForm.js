@@ -38,8 +38,8 @@ export default class ProjectForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const { project } = this.state;
-    this.props.projects.saveOne(project);
-    this.props.history.push('/projects');
+    this.props.projects.saveOne(project)
+      .then(() => this.props.history.push('/projects'));
   }
 
   render() {
