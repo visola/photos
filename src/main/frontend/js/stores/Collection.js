@@ -3,6 +3,7 @@ import { action, computed, observable } from 'mobx';
 
 export default class Collection {
   @observable data = [];
+  @observable error = null;
   @observable loading = false;
   @observable saving = false;
 
@@ -23,7 +24,8 @@ export default class Collection {
         this.addOne(response.data);
         this.saving = false;
         return this;
-      });
+      })
+      .catch((error) => this.handleError(error));
   }
 
   filter(callback) {
@@ -37,7 +39,8 @@ export default class Collection {
         this.setData(response.data);
         this.loading = false;
         return this;
-      });
+      })
+      .catch((error) => this.handleError(error));
   }
 
   findById(id) {
@@ -52,6 +55,13 @@ export default class Collection {
   @computed
   get isEmpty() {
     return this.length === 0;
+  }
+
+  @action
+  handleError(error) {
+    this.error = error;
+    this.loading = false;
+    this.saving = false;
   }
 
   map(callback) {
@@ -71,7 +81,8 @@ export default class Collection {
         this.setData(newArray);
         this.saving = false;
         return this;
-      });
+      })
+      .catch((error) => this.handleError(error));
   }
 
   @action
