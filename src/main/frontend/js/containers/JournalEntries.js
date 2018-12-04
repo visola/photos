@@ -41,8 +41,6 @@ export default class JournalEntries extends React.Component {
   render() {
     return <React.Fragment>
       <JournalEntryForm onSave={this.handleSave.bind(this)} />
-      <br />
-      <br />
       {this.renderDates()}
     </React.Fragment>
   }
@@ -70,7 +68,7 @@ export default class JournalEntries extends React.Component {
       entryDates.forEach(d => symbol.push("o"))
     }
 
-    return <Table.Cell textAlign="center">
+    return <Table.Cell key={day.unix()} textAlign="center">
       {day.format('MMM DD')}
       <br />
       {symbol}
@@ -79,7 +77,7 @@ export default class JournalEntries extends React.Component {
 
   renderGrid() {
     const days = this.getDays();
-    return <Table collapsing>
+    return <Table collapsing unstackable>
       <Table.Body>
         {days.map(week => this.renderWeek(week))}
       </Table.Body>
