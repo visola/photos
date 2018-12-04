@@ -38,16 +38,18 @@ export default class JournalEntryForm extends React.Component {
 
   render() {
     const { entry, saving } = this.state;
-    const action = saving ? false : <Button onClick={this.handleSave}>Save</Button>;
-    return <Input
-      action={action}
-      className="long"
-      placeholder="Say something positive..."
-      onChange={this.handleEntryChange}
-      onKeyPress={this.handleKeyPress}
-      loading={saving}
-      value={entry}
-    />
+    return <React.Fragment>
+      <Input
+        className="long"
+        fluid
+        loading={saving}
+        onChange={this.handleEntryChange}
+        onKeyPress={this.handleKeyPress}
+        placeholder="Say something positive..."
+        value={entry}
+      />
+      <Button disabled={saving} onClick={this.handleSave}>Save</Button>
+    </React.Fragment>
   }
 
   triggerOnSave() {
