@@ -44,7 +44,7 @@ public class GoogleOAuthController {
   private static final String CSRF_TOKEN_COOKIE_NAME = "CSRFTOKEN";
   private static final String GOOGLE_OAUTH_ENDPOINT = "https://accounts.google.com/o/oauth2/auth";
   private static final String GOOGLE_TOKEN_ENDPOINT = "https://www.googleapis.com/oauth2/v3/token";
-  private static final String GOOGLE_EMAIL_ENDPOINT = "https://www.googleapis.com/plus/v1/people/me";
+  private static final String GOOGLE_EMAIL_ENDPOINT = "https://www.googleapis.com/oauth2/v3/userinfo";
   private static final String SCOPES = "email";
   private static final GrantedAuthority[] ROLES = new GrantedAuthority[]{new SimpleGrantedAuthority("ROLE_USER")};
 
@@ -134,13 +134,7 @@ public class GoogleOAuthController {
 
     HttpResponse response = httpClient.execute(get);
     JsonNode node = objectMapper.readTree(response.getEntity().getContent());
-    for (JsonNode email : node.get("emails")) {
-      if (email.get("type").asText().equals("account")) {
-        return email.get("value").asText();
-      }
-    }
-
-    throw new RuntimeException("Can't find user email.");
+    return node.get("email").asText();
   }
 
   private String getToken(String code) throws Exception {
