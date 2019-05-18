@@ -85,7 +85,7 @@ export default class JournalEntries extends React.Component {
   }
 
   renderWeek(week) {
-    return <Table.Row>
+    return <Table.Row key={week[0].format('w')}>
       {week.map(d => this.renderDay(d))}
     </Table.Row>;
   }
