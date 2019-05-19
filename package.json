@@ -6,6 +6,10 @@
     "start": "rm -Rf build/frontend/static && parcel watch -d build/frontend/static --public-url / src/main/frontend/html/index.html"
   },
   "dependencies": {
+    "@uppy/core": "^1.0.2",
+    "@uppy/react": "^1.0.2",
+    "@uppy/tus": "^1.0.2",
+    "@uppy/xhr-upload": "^1.0.2",
     "axios": "^0.18.0",
     "babel-preset-env": "^1.7.0",
     "mobx": "^5.0.3",
