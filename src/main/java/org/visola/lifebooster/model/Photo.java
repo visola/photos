@@ -1,5 +1,7 @@
 package org.visola.lifebooster.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 
 @Data
@@ -9,8 +11,10 @@ public class Photo {
   private long userId;
   private String hash;
   private String name;
-  private String path;
   private long size;
   private long uploadedAt;
+
+  @JsonIgnore
+  private String path;
 
 }

@@ -2,18 +2,24 @@ package org.visola.lifebooster.controllers;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Optional;
+
+import javax.xml.ws.Response;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.visola.lifebooster.dao.PhotoDao;
+import org.visola.lifebooster.model.Page;
 import org.visola.lifebooster.model.Photo;
 import org.visola.lifebooster.model.User;
 
@@ -37,6 +43,23 @@ public class PhotoController {
     this.bucketName = bucketName;
     this.photoDao = photoDao;
     this.storage = storage;
+  }
+
+  @GetMapping
+  @ResponseBody
+  public ResponseEntity<?> getPhotos(
+      @RequestParam(required = false, defaultValue = "1") int pageNumber,
+      @RequestParam(required = false, defaultValue = "100") int pageSize,
+      @AuthenticationPrincipal User user) {
+
+    List<Photo> data = photoDao.fetchPage(user.getId(), (pageNumber - 1) * pageSize, pageSize);
+    Page<Photo> page = new Page<>();
+    page.setNumber(pageNumber);
+    page.setSize(pageSize);
+    page.setData(data);
+    page.setTotalElements(photoDao.countPhotos(user.getId()));
+
+    return ResponseEntity.ok(page);
   }
 
   @PostMapping
