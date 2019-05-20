@@ -1,4 +1,4 @@
-import { autorun } from 'mobx';
+import { action, autorun } from 'mobx';
 import Collection from './Collection';
 import Uppy from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
@@ -33,5 +33,10 @@ export default class Photos extends Collection {
 
   get baseApi() {
     return '/api/v1/photos';
+  }
+
+  @action
+  setData(page) {
+    this.data = page.data;
   }
 }
