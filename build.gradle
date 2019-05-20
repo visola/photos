@@ -21,6 +21,7 @@ repositories {
 dependencies {
   compileOnly('org.projectlombok:lombok:1.18.2')
 
+  implementation('com.google.cloud:google-cloud-storage:1.74.0')
   implementation('mysql:mysql-connector-java:8.0.12')
   implementation('org.apache.httpcomponents:httpclient')
   implementation('org.flywaydb:flyway-core')
