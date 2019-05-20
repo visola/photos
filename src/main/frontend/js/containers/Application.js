@@ -8,6 +8,7 @@ import Habits from './Habits';
 import Home from './Home';
 import Login from './Login';
 import JournalEntries from './JournalEntries';
+import Photos from './Photos';
 import ProjectForm from './ProjectForm';
 import Projects from './Projects';
 import TopMenu from './TopMenu';
@@ -34,6 +35,7 @@ export default class Application extends React.Component {
           <Route exact path="/journal-entries" component={JournalEntries} />
           <Route exact path="/projects" component={Projects} />
           <Route exact path="/projects/:projectId" component={withRouter(ProjectForm)} />
+          <Route exact path="/photos" component={Photos} />
         </div>
       </React.Fragment>
     </BrowserRouter>;
