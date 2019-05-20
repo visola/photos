@@ -1,5 +1,6 @@
 package org.visola.lifebooster.dao;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
@@ -18,7 +19,8 @@ public interface PhotoDao {
   long create(@BindBean Photo photo);
 
   @RegisterBeanMapper(Photo.class)
-  @SqlQuery("SELECT * FROM photo WHERE hash = :hash")
-  Optional<Photo> findByHash(@Bind("hash") String hash);
+  @SqlQuery("SELECT * FROM photo WHERE hash = :hash AND user_id := userId")
+  Optional<Photo> findByHash(@Bind("hash") String hash, @Bind("userId") long userId);
+
 
 }

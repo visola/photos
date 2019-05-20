@@ -6,6 +6,7 @@ import lombok.Data;
 public class Photo {
 
   private long id;
+  private long userId;
   private String hash;
   private String name;
   private String path;
