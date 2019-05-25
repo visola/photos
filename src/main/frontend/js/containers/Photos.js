@@ -3,7 +3,7 @@ import { DragDrop } from '@uppy/react';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 
-@inject('photos')
+@inject('photos', 'security')
 @observer
 export default class Photos extends React.Component {
   constructor(props) {
@@ -45,8 +45,12 @@ export default class Photos extends React.Component {
       return <Loader />
     }
 
-    return this.props.photos.map((p) => {
-      return <div className="image-preview" key={p.id}>{p.name}</div>
-    });
+    const { token } = this.props.security;
+
+    return <div className="image-previews">
+      {this.props.photos.map((p) => {
+        return <img src={`/api/v1/photos/${p.id}/thumbnail?auth=${token}`} key={p.id} />
+      })}
+    </div>;
   }
 }

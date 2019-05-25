@@ -39,5 +39,8 @@ public interface PhotoDao {
   @SqlQuery("SELECT * FROM photo WHERE hash = :hash AND user_id = :userId")
   Optional<Photo> findByHash(@Bind("hash") String hash, @Bind("userId") long userId);
 
+  @RegisterBeanMapper(Photo.class)
+  @SqlQuery("SELECT * FROM photo WHERE id = :id AND user_id = :userId")
+  Optional<Photo> findById(@Bind("id") long id, @Bind("userId") long userId);
 
 }
