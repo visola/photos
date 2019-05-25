@@ -9,6 +9,7 @@ export default class Photos extends React.Component {
   constructor(props) {
     super(props);
 
+    props.photos.initializeUppy()
     this.handleUploadSuccess = this.handleUploadSuccess.bind(this);
   }
 
@@ -18,7 +19,9 @@ export default class Photos extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.photos.uppy.off('upload-success', this.handleUploadSuccess);
+    const { photos } = this.props;
+    photos.uppy.off('upload-success', this.handleUploadSuccess);
+    photos.closeUppy();
   }
 
   handleUploadSuccess() {

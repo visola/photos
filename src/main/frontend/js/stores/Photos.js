@@ -6,7 +6,19 @@ import XHRUpload from '@uppy/xhr-upload';
 export default class Photos extends Collection {
   constructor(security) {
     super();
+    this.security = security;
+  }
 
+  closeUppy() {
+    this.uppy.close();
+    this.uppy = null;
+  }
+
+  get baseApi() {
+    return '/api/v1/photos';
+  }
+
+  initializeUppy() {
     this.uppy = Uppy({
       autoProceed: true,
       restrictions: {
@@ -14,25 +26,16 @@ export default class Photos extends Collection {
       },
     });
 
-    autorun(() => {
-      if (!security.isLoggedIn) {
-        return;
+    this.uppy.use(
+      XHRUpload,
+      {
+        bundle: false,
+        endpoint: '/api/v1/photos',
+        fieldName: 'file',
+        headers: { Authorization: `Bearer ${this.security.token}` },
+        timeout: 0,
       }
-
-      this.uppy.use(
-        XHRUpload,
-        {
-          bundle: false,
-          endpoint: '/api/v1/photos',
-          fieldName: 'file',
-          headers: { Authorization: `Bearer ${security.token}` }
-        }
-      );
-    });
-  }
-
-  get baseApi() {
-    return '/api/v1/photos';
+    );
   }
 
   @action
