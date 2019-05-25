@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.visola.lifebooster.security.AuthenticationFilter;
 import org.visola.lifebooster.security.UserAuthenticationJwtClaimsSetTransformer;
 import org.visola.spring.security.tokenfilter.TokenAuthenticationFilter;
 
@@ -20,14 +21,14 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
   private String baseApiPath;
 
   @Autowired
-  private TokenAuthenticationFilter tokenAuthenticationFilter;
+  private AuthenticationFilter authenticationFilter;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable()
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-    http.addFilterBefore(tokenAuthenticationFilter, BasicAuthenticationFilter.class);
+    http.addFilterBefore(authenticationFilter, BasicAuthenticationFilter.class);
 
     http
         .authorizeRequests()

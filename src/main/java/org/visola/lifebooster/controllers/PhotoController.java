@@ -1,6 +1,8 @@
 package org.visola.lifebooster.controllers;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,10 +24,14 @@ import org.visola.lifebooster.model.Page;
 import org.visola.lifebooster.model.Photo;
 import org.visola.lifebooster.model.User;
 
+import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.common.hash.Hashing;
+import com.google.common.io.ByteStreams;
+
+import sun.misc.IOUtils;
 
 @RequestMapping("${api.base.path}/photos")
 @Controller
@@ -33,14 +40,43 @@ public class PhotoController {
   private final String bucketName;
   private final PhotoDao photoDao;
   private final Storage storage;
+  private final String thumbnailsBucketName;
+
+  private final byte[] emptyImage;
 
   public PhotoController(
       @Value("${photos.bucket.name}") String bucketName,
+      @Value("${photos.bucket.thumbnails}") String thumbnailsBucketName,
       PhotoDao photoDao,
-      Storage storage) {
+      Storage storage) throws IOException {
     this.bucketName = bucketName;
     this.photoDao = photoDao;
     this.storage = storage;
+    this.thumbnailsBucketName = thumbnailsBucketName;
+
+    emptyImage = ByteStreams.toByteArray(
+        this.getClass().getClassLoader().getResourceAsStream("empty-image.png")
+    );
+  }
+
+  @GetMapping("/{photoId}/thumbnail")
+  public void downloadThumbnail(
+      @PathVariable long photoId,
+      OutputStream output,
+      @AuthenticationPrincipal User user)
+      throws IOException {
+    Optional<Photo> maybePhoto = photoDao.findById(photoId, user.getId());
+    if (!maybePhoto.isPresent()) {
+      throw new NotFoundException("Image not found with ID: " + photoId);
+    }
+
+    Blob blob = storage.get(BlobId.of(thumbnailsBucketName, maybePhoto.get().getPath()));
+    if (blob == null) {
+      output.write(emptyImage);
+      return;
+    }
+
+    output.write(blob.getContent());
   }
 
   @GetMapping
