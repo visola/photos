@@ -1,6 +1,5 @@
 package org.visola.lifebooster.controllers;
 
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -30,8 +29,6 @@ import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteStreams;
-
-import sun.misc.IOUtils;
 
 @RequestMapping("${api.base.path}/photos")
 @Controller
