@@ -29,7 +29,7 @@ resource "google_compute_instance" "base_instance" {
     }
 }
 
-resource "google_storage_bucket" "image-store" {
+resource "google_storage_bucket" "image_store" {
     name     = "life-booster-${var.environment}"
     location = var.region
     force_destroy = true
@@ -41,7 +41,7 @@ resource "google_storage_bucket" "image-store" {
     storage_class = "REGIONAL"
 }
 
-resource "google_storage_bucket" "thumbnail-store" {
+resource "google_storage_bucket" "thumbnail_store" {
     name     = "life-booster-${var.environment}-thumbnails"
     location = var.region
     force_destroy = true
@@ -51,4 +51,45 @@ resource "google_storage_bucket" "thumbnail-store" {
     }
 
     storage_class = "REGIONAL"
+}
+
+resource "google_storage_bucket" "functions_source" {
+  name = "functions_source_${var.environment}"
+}
+
+data "archive_file" "thumbnail_generator" {
+  type        = "zip"
+  source_dir  = "${var.root_dir}/src/main/functions/thumbnail_generator"
+  output_path = "${var.build_dir}/thumbnail_generator.zip"
+}
+
+resource "google_storage_bucket_object" "generate_thumbnail_source" {
+  name   = "generate_thumbnail_source.zip"
+  bucket = "${google_storage_bucket.functions_source.name}"
+  source = data.archive_file.thumbnail_generator.output_path
+}
+
+resource "google_cloudfunctions_function" "generate_thumbnail" {
+    name                  = "generate_thumbnail_${var.environment}"
+    description           = "Function to generate thumbnails from uploaded photos."
+    runtime               = "nodejs10"
+
+    available_memory_mb   = 256
+
+    source_archive_bucket = google_storage_bucket.functions_source.name
+    source_archive_object = google_storage_bucket_object.generate_thumbnail_source.name
+
+    environment_variables = {
+        FUNCTION_NAME    = "generate_thumbnail_${var.environment}"
+        THUMBNAIL_BUCKET = "${google_storage_bucket.thumbnail_store.name}"
+    }
+
+    event_trigger {
+        event_type = "google.storage.object.finalize"
+        resource   = google_storage_bucket.image_store.name
+    }
+
+    labels = {
+        environment = var.environment
+    }
 }

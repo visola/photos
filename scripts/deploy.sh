@@ -8,7 +8,7 @@ source $SCRIPT_DIR/base_terraform.sh
 PROJECT=$1
 ENVIRONMENT=$2
 REGION=us-east1
-DEPLOY_VERSION=$VERSION-$(date +%Y%m%d%H%M%S)
+DEPLOY_VERSION=$VERSION-$GIT_SHA
 
 IMAGE_BUCKET_NAME=life-booster-$ENVIRONMENT
 
@@ -17,16 +17,6 @@ gcloud config set compute/zone us-east1-b
 
 echo "Building..."
 ./gradlew build > /dev/null
-
-echo "Deploying thumbnail generator function..."
-gcloud functions deploy generateThumb \
-    --region $REGION \
-    --project $PROJECT \
-    --runtime nodejs8 \
-    --trigger-bucket $IMAGE_BUCKET_NAME \
-    --set-env-vars "THUMBNAIL_BUCKET=$IMAGE_BUCKET_NAME-thumbnails" \
-    --source src/main/functions/thumb_generator
-
 
 INSTANCE_NAME=$(gcloud compute instances list --filter labels.environment=$ENVIRONMENT --format json | jq -r '.[] | .name')
 JAR_NAME=life-booster-${VERSION}.jar
