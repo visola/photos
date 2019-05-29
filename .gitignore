@@ -10,4 +10,7 @@ node_modules/
 out/
 .project
 .settings/
+/terraform/.terraform
+/terraform/credentials.json
+/terraform/terraform.tfstate*
 .vscode/

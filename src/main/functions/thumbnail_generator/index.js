@@ -5,7 +5,7 @@ const { Storage } = require('@google-cloud/storage');
 
 const storage = new Storage();
 
-exports.generateThumb = object => {
+exports[process.env.FUNCTION_NAME] = object => {
     if (object.resourceState === 'not_exists') {
         console.log('This is a deletion event.');
         return;

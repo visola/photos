@@ -122,7 +122,7 @@ public class GoogleOAuthController {
 
     String token = tokenService.generateToken(new UserAuthentication(user));
 
-    ModelAndView mv = new ModelAndView("/oauth2callback");
+    ModelAndView mv = new ModelAndView("oauth2callback");
     mv.addObject("user", user);
     mv.addObject("token", token);
     return mv;
