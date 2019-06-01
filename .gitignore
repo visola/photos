@@ -1,4 +1,5 @@
 /application.yml
+/application-*.yml
 bin/
 build/
 .cache/
@@ -12,5 +13,6 @@ out/
 .settings/
 /terraform/.terraform
 /terraform/credentials.json
+/terraform/terraform.tfvars
 /terraform/terraform.tfstate*
 .vscode/
