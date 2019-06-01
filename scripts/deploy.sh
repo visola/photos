@@ -9,6 +9,7 @@ PROJECT=$1
 ENVIRONMENT=$2
 REGION=us-east1
 DEPLOY_VERSION=$VERSION-$GIT_SHA
+CONFIGURATION_FILE="application-$ENVIRONMENT.yml"
 
 IMAGE_BUCKET_NAME=life-booster-$ENVIRONMENT
 
@@ -26,4 +27,9 @@ echo "Deploying to ${INSTANCE_NAME}..."
 gcloud compute ssh $INSTANCE_NAME --command="ls -la"
 gcloud compute scp src/main/scripts/run.sh $INSTANCE_NAME:run.sh
 gcloud compute scp build/libs/$JAR_NAME $INSTANCE_NAME:$DEPLOY_JAR
+
+if [ -f "$CONFIGURATION_FILE" ]; then
+    gcloud compute scp $CONFIGURATION_FILE $INSTANCE_NAME:application.yml
+fi
+
 gcloud compute ssh $INSTANCE_NAME --command="./run.sh $DEPLOY_JAR"

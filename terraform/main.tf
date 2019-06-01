@@ -19,7 +19,14 @@ resource "google_compute_instance" "base_instance" {
         environment = var.environment
     }
 
-    metadata_startup_script = "sudo apt-get update; sudo apt-get install -y openjdk-8-jre;"
+    metadata_startup_script = <<INIT_SCRIPT
+        sudo apt-get update
+        sudo apt-get install -y openjdk-8-jre
+
+        sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password ${var.db_password}'
+        sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password ${var.db_password}'
+        sudo apt-get -y install mysql-server
+    INIT_SCRIPT
 
     network_interface {
         access_config {
@@ -73,6 +80,7 @@ resource "google_cloudfunctions_function" "generate_thumbnail" {
     name                  = "generate_thumbnail_${var.environment}"
     description           = "Function to generate thumbnails from uploaded photos."
     runtime               = "nodejs10"
+    entry_point           = "generate_thumbnail_${var.environment}"
 
     available_memory_mb   = 256
 
