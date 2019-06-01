@@ -26,6 +26,7 @@ resource "google_compute_instance" "base_instance" {
         sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password ${var.db_password}'
         sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password ${var.db_password}'
         sudo apt-get -y install mysql-server
+        mysql -u root '-p${var.db_password}' -e 'CREATE DATABASE life_booster'
     INIT_SCRIPT
 
     network_interface {
