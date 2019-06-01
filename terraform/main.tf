@@ -15,6 +15,8 @@ resource "google_compute_instance" "base_instance" {
         }
     }
 
+    tags = [ "web" ]
+
     labels = {
         environment = var.environment
     }
@@ -101,4 +103,20 @@ resource "google_cloudfunctions_function" "generate_thumbnail" {
     labels = {
         environment = var.environment
     }
+}
+
+data "google_compute_network" "default" {
+  name = "default-us-east1"
+}
+
+resource "google_compute_firewall" "web_traffic" {
+    name    = "web-traffic"
+    network = data.google_compute_network.default.name
+
+    allow {
+        protocol = "tcp"
+        ports    = ["80", "443", "8080"]
+    }
+
+    target_tags = [ "web" ]
 }
