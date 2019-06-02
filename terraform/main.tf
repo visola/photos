@@ -5,6 +5,14 @@ provider "google" {
     zone        = var.zone
 }
 
+data "template_file" "init_script" {
+    template = file("init_script_template.sh")
+    vars = {
+        db_password = var.db_password
+        subdomain = "life-booster-${var.environment}.${data.google_dns_managed_zone.base_domain.dns_name}"
+    }
+}
+
 resource "google_compute_instance" "base_instance" {
     name = "life-booster-${var.environment}"
     machine_type = "g1-small"
@@ -21,15 +29,7 @@ resource "google_compute_instance" "base_instance" {
         environment = var.environment
     }
 
-    metadata_startup_script = <<INIT_SCRIPT
-        sudo apt-get update
-        sudo apt-get install -y openjdk-8-jre
-
-        sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password ${var.db_password}'
-        sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password ${var.db_password}'
-        sudo apt-get -y install mysql-server
-        mysql -u root '-p${var.db_password}' -e 'CREATE DATABASE life_booster'
-    INIT_SCRIPT
+    metadata_startup_script = data.template_file.init_script.rendered
 
     network_interface {
         access_config {
@@ -115,7 +115,7 @@ resource "google_compute_firewall" "web_traffic" {
 
     allow {
         protocol = "tcp"
-        ports    = ["80", "443", "8080"]
+        ports    = ["80", "443"]
     }
 
     target_tags = [ "web" ]
