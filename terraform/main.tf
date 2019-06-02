@@ -106,7 +106,7 @@ resource "google_cloudfunctions_function" "generate_thumbnail" {
 }
 
 data "google_compute_network" "default" {
-  name = "default-us-east1"
+  name = "default"
 }
 
 resource "google_compute_firewall" "web_traffic" {
@@ -119,4 +119,18 @@ resource "google_compute_firewall" "web_traffic" {
     }
 
     target_tags = [ "web" ]
+}
+
+data "google_dns_managed_zone" "base_domain" {
+  name = var.base_domain_zone_name
+}
+
+resource "google_dns_record_set" "environment_domain" {
+    name = "life-booster-${var.environment}.${data.google_dns_managed_zone.base_domain.dns_name}"
+    type = "A"
+    ttl  = 60
+
+    managed_zone = "${data.google_dns_managed_zone.base_domain.name}"
+
+    rrdatas = ["${google_compute_instance.base_instance.network_interface.0.access_config.0.nat_ip}"]
 }
