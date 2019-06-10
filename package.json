@@ -1,5 +1,5 @@
 {
-  "name": "life-booster",
+  "name": "photos",
   "version": "1.0.0",
   "scripts": {
     "bundle": "rm -Rf build/frontend/static && parcel build -d build/frontend/static --public-url / src/main/frontend/html/index.html",

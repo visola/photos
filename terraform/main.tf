@@ -9,12 +9,12 @@ data "template_file" "init_script" {
     template = file("init_script_template.sh")
     vars = {
         db_password = var.db_password
-        subdomain = "life-booster-${var.environment}.${data.google_dns_managed_zone.base_domain.dns_name}"
+        subdomain = "photos-${var.environment}.${data.google_dns_managed_zone.base_domain.dns_name}"
     }
 }
 
 resource "google_compute_instance" "base_instance" {
-    name = "life-booster-${var.environment}"
+    name = "photos-${var.environment}"
     machine_type = "g1-small"
 
     boot_disk {
@@ -40,7 +40,7 @@ resource "google_compute_instance" "base_instance" {
 }
 
 resource "google_storage_bucket" "image_store" {
-    name     = "life-booster-${var.environment}"
+    name     = "photos-${var.environment}"
     location = var.region
     force_destroy = true
 
@@ -52,7 +52,7 @@ resource "google_storage_bucket" "image_store" {
 }
 
 resource "google_storage_bucket" "thumbnail_store" {
-    name     = "life-booster-${var.environment}-thumbnails"
+    name     = "photos-${var.environment}-thumbnails"
     location = var.region
     force_destroy = true
 
@@ -126,7 +126,7 @@ data "google_dns_managed_zone" "base_domain" {
 }
 
 resource "google_dns_record_set" "environment_domain" {
-    name = "life-booster-${var.environment}.${data.google_dns_managed_zone.base_domain.dns_name}"
+    name = "photos-${var.environment}.${data.google_dns_managed_zone.base_domain.dns_name}"
     type = "A"
     ttl  = 60
 

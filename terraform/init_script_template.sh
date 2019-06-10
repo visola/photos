@@ -10,7 +10,7 @@ mysql -u root '-p${db_password}' -e 'CREATE DATABASE life_booster'
 
 sudo apt-get install -y nginx
 sudo rm /etc/nginx/sites-enabled/default
-sudo tee -a /etc/nginx/sites-enabled/life-booster.conf > /dev/null <<EOF
+sudo tee -a /etc/nginx/sites-enabled/photos.conf > /dev/null <<EOF
 server {
     listen 80 default_server;
     listen [::]:80 default_server;
