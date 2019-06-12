@@ -5,11 +5,7 @@ import React from 'react';
 export default class TopMenu extends React.Component {
   render() {
     const items = [
-      { path: "/", label: "Life Booster" },
-      { path: "/journal-entries", label: "Journal Entries" },
-      { path: "/habits", label: "Habits" },
-      { path: "/projects", label: "Projects" },
-      { path: "/photos", label: "Photos" }
+      { path: "/", label: "Photos" }
     ];
 
     return <Menu stackable>

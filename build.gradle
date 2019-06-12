@@ -9,7 +9,7 @@ apply plugin: 'io.spring.dependency-management'
 version = "0.1.0"
 
 jar {
-  baseName = 'life-booster'
+  baseName = 'photos'
   version = '0.0.2-SNAPSHOT'
 }
 

@@ -11,7 +11,7 @@ REGION=us-east1
 DEPLOY_VERSION=$VERSION-$GIT_SHA
 CONFIGURATION_FILE="application-$ENVIRONMENT.yml"
 
-IMAGE_BUCKET_NAME=life-booster-$ENVIRONMENT
+IMAGE_BUCKET_NAME=photos-$ENVIRONMENT
 
 gcloud config set project $PROJECT
 gcloud config set compute/zone us-east1-b
@@ -20,8 +20,8 @@ echo "Building..."
 ./gradlew clean build > /dev/null
 
 INSTANCE_NAME=$(gcloud compute instances list --filter labels.environment=$ENVIRONMENT --format json | jq -r '.[] | .name')
-JAR_NAME=life-booster-${VERSION}.jar
-DEPLOY_JAR=life-booster-$DEPLOY_VERSION.jar
+JAR_NAME=photos-${VERSION}.jar
+DEPLOY_JAR=photos-$DEPLOY_VERSION.jar
 
 echo "Shutting down old version..."
 gcloud compute scp src/main/scripts/shutdown.sh $INSTANCE_NAME:shutdown.sh

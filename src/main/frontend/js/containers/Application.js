@@ -3,14 +3,8 @@ import { inject, observer } from 'mobx-react';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import HabitForm from './HabitForm';
-import Habits from './Habits';
-import Home from './Home';
 import Login from './Login';
-import JournalEntries from './JournalEntries';
 import Photos from './Photos';
-import ProjectForm from './ProjectForm';
-import Projects from './Projects';
 import TopMenu from './TopMenu';
 
 @inject('security')
@@ -29,12 +23,7 @@ export default class Application extends React.Component {
       <React.Fragment>
         <TopMenu />
         <div id="content">
-          <Route exact path="/" component={Home} />
-          <Route exact path="/habits" component={Habits} />
-          <Route exact path="/habits/:habitId" component={withRouter(HabitForm)} />
-          <Route exact path="/journal-entries" component={JournalEntries} />
-          <Route exact path="/projects" component={Projects} />
-          <Route exact path="/projects/:projectId" component={withRouter(ProjectForm)} />
+          <Route exact path="/" component={Photos} />
           <Route exact path="/photos" component={Photos} />
         </div>
       </React.Fragment>
