@@ -1,4 +1,4 @@
-package org.visola.lifebooster.controllers;
+package org.visola.photos.controllers;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.visola.lifebooster.dao.PhotoDao;
-import org.visola.lifebooster.model.Page;
-import org.visola.lifebooster.model.Photo;
-import org.visola.lifebooster.model.User;
+import org.visola.photos.dao.PhotoDao;
+import org.visola.photos.model.Page;
+import org.visola.photos.model.Photo;
+import org.visola.photos.model.User;
 
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;

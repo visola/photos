@@ -1,4 +1,4 @@
-package org.visola.lifebooster.controllers;
+package org.visola.photos.controllers;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -30,8 +30,8 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.visola.lifebooster.dao.UserDao;
-import org.visola.lifebooster.security.UserAuthentication;
+import org.visola.photos.dao.UserDao;
+import org.visola.photos.security.UserAuthentication;
 import org.visola.spring.security.tokenfilter.TokenService;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -110,12 +110,12 @@ public class GoogleOAuthController {
     }
 
     String email = getUserEmail(getToken(code));
-    org.visola.lifebooster.model.User user = null;
-    Optional<org.visola.lifebooster.model.User> maybeUser = userDao.findByEmail(email);
+    org.visola.photos.model.User user = null;
+    Optional<org.visola.photos.model.User> maybeUser = userDao.findByEmail(email);
     if (maybeUser.isPresent()) {
       user = maybeUser.get();
     } else {
-      user = new org.visola.lifebooster.model.User();
+      user = new org.visola.photos.model.User();
       user.setEmail(email);
       user.setId(userDao.create(user));
     }

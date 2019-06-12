@@ -1,4 +1,4 @@
-package org.visola.lifebooster.controllers;
+package org.visola.photos.controllers;
 
 public class NotFoundException extends RuntimeException {
 

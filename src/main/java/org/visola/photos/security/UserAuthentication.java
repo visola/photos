@@ -1,4 +1,4 @@
-package org.visola.lifebooster.security;
+package org.visola.photos.security;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.visola.lifebooster.model.User;
+import org.visola.photos.model.User;
 
 public class UserAuthentication implements Authentication {
 

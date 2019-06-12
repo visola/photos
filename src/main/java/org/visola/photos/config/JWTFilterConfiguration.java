@@ -1,8 +1,8 @@
-package org.visola.lifebooster.config;
+package org.visola.photos.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.visola.lifebooster.security.UserAuthenticationJwtClaimsSetTransformer;
+import org.visola.photos.security.UserAuthenticationJwtClaimsSetTransformer;
 
 @Configuration
 public class JWTFilterConfiguration {

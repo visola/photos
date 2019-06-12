@@ -1,4 +1,4 @@
-package org.visola.lifebooster.dao;
+package org.visola.photos.dao;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +9,7 @@ import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
-import org.visola.lifebooster.model.Photo;
+import org.visola.photos.model.Photo;
 
 public interface PhotoDao {
 

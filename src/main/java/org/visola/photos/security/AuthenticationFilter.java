@@ -1,4 +1,4 @@
-package org.visola.lifebooster.security;
+package org.visola.photos.security;
 
 import java.io.IOException;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package org.visola.lifebooster.config;
+package org.visola.photos.config;
 
 import javax.sql.DataSource;
 
@@ -6,8 +6,8 @@ import org.jdbi.v3.core.Jdbi;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.visola.lifebooster.dao.PhotoDao;
-import org.visola.lifebooster.dao.UserDao;
+import org.visola.photos.dao.PhotoDao;
+import org.visola.photos.dao.UserDao;
 
 @Configuration
 public class JDBIConfiguration {

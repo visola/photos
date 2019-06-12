@@ -1,12 +1,11 @@
-package org.visola.lifebooster.security;
+package org.visola.photos.security;
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.security.core.Authentication;
-import org.visola.lifebooster.model.User;
+import org.visola.photos.model.User;
 import org.visola.spring.security.tokenfilter.jwt.AuthenticationJwtClaimsSetTransformer;
 
 import com.nimbusds.jwt.JWTClaimsSet;

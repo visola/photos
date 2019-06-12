@@ -1,4 +1,4 @@
-package org.visola.lifebooster.config;
+package org.visola.photos.config;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 

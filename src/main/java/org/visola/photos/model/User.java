@@ -1,4 +1,4 @@
-package org.visola.lifebooster.model;
+package org.visola.photos.model;
 
 import lombok.Data;
 
