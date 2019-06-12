@@ -21,7 +21,14 @@ fi
 GIT_SHA=$(git rev-parse --short HEAD)
 VERSION=$(./gradlew properties | grep version | awk '{ print $2 }')
 
-echo "+-------------------------+"
-echo "| Git SHA: $GIT_SHA"
-echo "| Version is: $VERSION"
-echo "+-------------------------+"
+PROJECT=$1
+ENVIRONMENT=$2
+
+INFRA_DIR=./infrastructure/$ENVIRONMENT
+
+echo "+---------------------------------------------------------+"
+echo "| Git SHA:            $GIT_SHA"
+echo "| Version is:         $VERSION"
+echo "| Environment:        $ENVIRONMENT"
+echo "| Infrastructure Dir: $INFRA_DIR"
+echo "+---------------------------------------------------------+"
