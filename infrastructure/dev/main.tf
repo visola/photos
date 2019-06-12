@@ -12,3 +12,11 @@ module "mysql_database" {
   db_password = var.db_password
   environment = var.environment
 }
+
+module "buckets" {
+  source = "../modules/buckets"
+
+  environment = var.environment
+  region      = var.region
+  zone        = var.zone
+}
