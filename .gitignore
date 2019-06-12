@@ -4,6 +4,7 @@ bin/
 build/
 .cache/
 .classpath
+credentials.json
 .gradle/
 .idea/
 *.iml
@@ -11,8 +12,8 @@ node_modules/
 out/
 .project
 .settings/
-/terraform/.terraform
-/terraform/credentials.json
-/terraform/terraform.tfvars
-/terraform/terraform.tfstate*
+.terraform
+.terraform.*
+terraform.tfvars
+terraform.tfstate*
 .vscode/
