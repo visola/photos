@@ -5,6 +5,17 @@ provider "google" {
   zone        = var.zone
 }
 
+data "google_client_config" "current" {
+  // Empty block
+}
+
+provider "kubernetes" {
+  cluster_ca_certificate = module.primary_gke.cluster_ca_certificate
+  host                   = module.primary_gke.endpoint
+  load_config_file       = false
+  token                  = data.google_client_config.current.access_token
+}
+
 module "buckets" {
   source = "../modules/buckets"
 
