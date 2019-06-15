@@ -19,10 +19,6 @@ variable "region" {
     description = "Region where the environment is going to be created."
 }
 
-variable "root_dir" {
-    default = ".."
-}
-
 variable "zone" {
     default = "us-east1-b"
     description = "Zone used to create the resources."

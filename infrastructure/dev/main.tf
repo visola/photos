@@ -10,9 +10,9 @@ data "google_client_config" "current" {
 }
 
 provider "kubernetes" {
-  cluster_ca_certificate = module.primary_gke.cluster_ca_certificate
   host                   = module.primary_gke.endpoint
-  load_config_file       = false
+
+  cluster_ca_certificate = base64decode(module.primary_gke.cluster_ca_certificate)
   token                  = data.google_client_config.current.access_token
 }
 

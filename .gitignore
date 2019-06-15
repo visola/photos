@@ -10,6 +10,7 @@ credentials.json
 *.iml
 node_modules/
 out/
+*.pem
 .project
 .settings/
 .terraform
