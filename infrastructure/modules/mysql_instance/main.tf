@@ -30,3 +30,24 @@ resource "google_compute_instance" "mysql_instance" {
     access_config {}
   }
 }
+
+data "google_compute_network" "default" {
+  name = "default"
+}
+
+data "google_compute_subnetwork" "default" {
+  name   = "default"
+  region = var.region
+}
+
+resource "google_compute_firewall" "mysql_ingress" {
+  name    = "mysql-ingress"
+  network = data.google_compute_network.default.name
+
+  allow {
+    protocol = "tcp"
+    ports    = [ "3306" ]
+  }
+
+  target_tags = ["mysql"]
+}

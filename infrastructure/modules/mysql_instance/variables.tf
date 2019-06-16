@@ -9,3 +9,8 @@ variable "db_password" {
 variable "environment" {
   description = "Name of the environment your building."
 }
+
+variable "region" {
+  default = "us-east1"
+  description = "Region where the environment is going to be created."
+}
