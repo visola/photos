@@ -10,13 +10,14 @@ source $SCRIPT_DIR/base.sh
 echo "--- Building package..."
 rm -Rf build
 npm install
-./gradlew clean build
+./gradlew clean build distZip
 
 echo "--- Building Docker image..."
 SOURCE_IMAGE=photos:$GIT_SHA
 
-pushd build/libs > /dev/null
-docker build --file $CURRENT_DIR/Dockerfile --build-arg JAR_FILE=photos-${VERSION}.jar --tag $SOURCE_IMAGE .
+pushd build/distributions > /dev/null
+unzip photos-${VERSION}.zip
+docker build --file $CURRENT_DIR/Dockerfile --build-arg "FILES_DIR=photos-${VERSION}/" --tag $SOURCE_IMAGE .
 popd > /dev/null
 
 echo "--- Configuring tools..."

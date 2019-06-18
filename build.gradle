@@ -1,16 +1,18 @@
 plugins {
   id "com.moowork.node" version "1.2.0"
-  id 'org.springframework.boot' version '2.1.5.RELEASE'
+  id 'org.springframework.boot' version '2.1.5.RELEASE'  apply false
 }
 
 apply plugin: 'java'
+apply plugin: 'application'
 apply plugin: 'io.spring.dependency-management'
 
 version = "0.1.0"
+mainClassName = "org.visola.photos.Main"
 
 jar {
   baseName = 'photos'
-  version = '0.0.2-SNAPSHOT'
+  version = "${project.version}-SNAPSHOT"
 }
 
 repositories {
@@ -18,6 +20,12 @@ repositories {
   mavenLocal()
   maven { url 'https://repo.spring.io/snapshot' }
   maven { url 'https://repo.spring.io/milestone' }
+}
+
+dependencyManagement {
+  imports {
+    mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+  }
 }
 
 dependencies {
