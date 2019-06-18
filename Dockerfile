@@ -1,6 +1,6 @@
 FROM openjdk:8-jre-alpine
 
-ARG FILES_DIR
+ARG JAR_FILE
 
-COPY $FILES_DIR /
-ENTRYPOINT ["/usr/bin/bash", "bin/photos" ]
+COPY $JAR_FILE app.jar
+ENTRYPOINT ["/usr/bin/java", "-jar", "app.jar"]
