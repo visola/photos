@@ -7,7 +7,7 @@ data "template_file" "init_script" {
 }
 
 resource "google_compute_instance" "mysql_instance" {
-  name = "${var.db_name}-instance"
+  name = "${var.db_name}-${var.environment}-db-instance"
   machine_type = "g1-small"
 
   boot_disk {
@@ -26,5 +26,28 @@ resource "google_compute_instance" "mysql_instance" {
 
   network_interface {
     network = "default"
+
+    access_config {}
   }
+}
+
+data "google_compute_network" "default" {
+  name = "default"
+}
+
+data "google_compute_subnetwork" "default" {
+  name   = "default"
+  region = var.region
+}
+
+resource "google_compute_firewall" "mysql_ingress" {
+  name    = "mysql-ingress"
+  network = data.google_compute_network.default.name
+
+  allow {
+    protocol = "tcp"
+    ports    = [ "3306" ]
+  }
+
+  target_tags = ["mysql"]
 }

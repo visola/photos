@@ -3,39 +3,57 @@
 set -e
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
+CURRENT_DIR=$(pwd)
+
 source $SCRIPT_DIR/base.sh
 
-PROJECT=$1
-ENVIRONMENT=$2
-REGION=us-east1
-DEPLOY_VERSION=$VERSION-$GIT_SHA
-CONFIGURATION_FILE="application-$ENVIRONMENT.yml"
+echo "--- Building package..."
+rm -Rf build
+npm install
+./gradlew clean build
 
-IMAGE_BUCKET_NAME=photos-$ENVIRONMENT
+echo "--- Building Docker image..."
+SOURCE_IMAGE=photos:$GIT_SHA
 
+pushd build/libs > /dev/null
+docker build --file $CURRENT_DIR/Dockerfile --build-arg JAR_FILE=photos-${VERSION}.jar --tag $SOURCE_IMAGE .
+popd > /dev/null
+
+echo "--- Configuring tools..."
 gcloud config set project $PROJECT
 gcloud config set compute/zone us-east1-b
+gcloud auth configure-docker
+gcloud container clusters get-credentials photos-$ENVIRONMENT
 
-echo "Building..."
-./gradlew clean build > /dev/null
+echo "--- Publishing Docker Images..."
+DEST_IMAGE=gcr.io/$PROJECT/$SOURCE_IMAGE
+docker tag $SOURCE_IMAGE $DEST_IMAGE
+docker push $DEST_IMAGE
 
-INSTANCE_NAME=$(gcloud compute instances list --filter labels.environment=$ENVIRONMENT --format json | jq -r '.[] | .name')
-JAR_NAME=photos-${VERSION}.jar
-DEPLOY_JAR=photos-$DEPLOY_VERSION.jar
-
-echo "Shutting down old version..."
-gcloud compute scp src/main/scripts/shutdown.sh $INSTANCE_NAME:shutdown.sh
-gcloud compute ssh $INSTANCE_NAME --command="./shutdown.sh"
-
-echo "Copying files..."
-gcloud compute scp src/main/scripts/run.sh $INSTANCE_NAME:run.sh
-gcloud compute scp build/libs/$JAR_NAME $INSTANCE_NAME:$DEPLOY_JAR
-
-if [ -f "$CONFIGURATION_FILE" ]; then
-    gcloud compute scp $CONFIGURATION_FILE $INSTANCE_NAME:application.yml
+echo "--- Generating files for kubernetes..."
+deploy_dir=build/deploy
+if [ ! -d $deploy_dir ];then
+  mkdir $deploy_dir
 fi
 
-gcloud compute ssh $INSTANCE_NAME --command="ls -la"
+CONFIGURATION_FILE="application-$ENVIRONMENT.yml"
+if [ -f $CONFIGURATION_FILE ]; then
+  cp $CONFIGURATION_FILE $deploy_dir/application.yml
+  kubectl delete secret --ignore-not-found photos-service
+  kubectl create secret generic photos-service --from-file $deploy_dir/application.yml
+  rm $deploy_dir/application.yml
+fi
 
-echo "Deploying to ${INSTANCE_NAME}..."
-gcloud compute ssh $INSTANCE_NAME --command="./run.sh $DEPLOY_JAR"
+
+for f in $INFRA_DIR/kubernetes/*.yml; do
+  filename=$(basename $f)
+  echo "Processing '$filename'"
+
+  cat $f | sed "s/GIT_SHA/$GIT_SHA/g" | \
+    sed "s/VERSION/$VERSION/g" | \
+    sed "s!DOCKER_IMAGE!$DEST_IMAGE!g" | \
+    sed "s/ENVIRONMENT/$ENVIRONMENT/g" > $deploy_dir/$filename
+done
+
+echo "--- Applying to cluster..."
+kubectl apply -f $deploy_dir

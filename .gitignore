@@ -8,8 +8,10 @@ credentials.json
 .gradle/
 .idea/
 *.iml
+letsencrypt/**
 node_modules/
 out/
+*.pem
 .project
 .settings/
 .terraform

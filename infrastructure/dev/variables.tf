@@ -1,3 +1,7 @@
+variable "base_domain_zone_name" {
+    description = "Name of the Managed Zone where the subdomains will be created in."
+}
+
 variable "db_name" {
     description = "Database name to be created in MySQL"
 }
@@ -19,8 +23,12 @@ variable "region" {
     description = "Region where the environment is going to be created."
 }
 
-variable "root_dir" {
-    default = ".."
+variable "tls_certificate_file" {
+    description = "Path to the TLS certificate file"
+}
+
+variable "tls_private_key" {
+    description = "Path to the TLS private key file"
 }
 
 variable "zone" {
