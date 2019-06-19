@@ -48,7 +48,7 @@ resource "kubernetes_ingress" "photos_ingress" {
     rule {
       http {
         path {
-          path = "/"
+          path = "/*"
           backend {
             service_name = local.service_name
             service_port = local.service_port
