@@ -1,5 +1,4 @@
 plugins {
-  id "com.moowork.node" version "1.2.0"
   id 'org.springframework.boot' version '2.1.5.RELEASE'
 }
 
@@ -35,20 +34,3 @@ dependencies {
   implementation('org.springframework.boot:spring-boot-starter-web')
   implementation('org.visola.spring.security:spring-security-token-filter-spring-boot-starter:2.0')
 }
-
-sourceSets {
-  main {
-    resources {
-      srcDir "${buildDir}/frontend"
-    }
-  }
-}
-
-task bundleFrontend (type: NpmTask) {
-  dependsOn npmInstall
-  args = ["run", "bundle"]
-  inputs.dir file("src/frontend")
-  outputs.dir file("${buildDir}/frontend/static")
-}
-
-processResources.dependsOn bundleFrontend
