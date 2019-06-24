@@ -1,5 +1,4 @@
-/application.yml
-/application-*.yml
+application-*.yml
 bin/
 build/
 .cache/
@@ -13,6 +12,7 @@ letsencrypt/**
 node_modules/
 out/
 *.pem
+photos-*/application.yml
 .project
 .settings/
 .terraform
