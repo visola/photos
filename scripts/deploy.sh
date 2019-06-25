@@ -18,10 +18,16 @@ gcloud config set compute/zone us-east1-b
 gcloud auth configure-docker
 gcloud container clusters get-credentials photos-$ENVIRONMENT
 
-echo "--- Building projects..."
+echo "--- Building frontend ---"
+pushd photos-frontend > /dev/null
+npm install
+npm run bundle
+popd > /dev/null
+
+echo "--- Building projects ---"
 ./gradlew clean build
 
-for project in photos-service; do
+for project in photos-frontend photos-service; do
   pushd $project > /dev/null
 
   SOURCE_IMAGE=$project:$GIT_SHA
