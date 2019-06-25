@@ -2,9 +2,8 @@
   "name": "photos",
   "version": "1.0.0",
   "scripts": {
-    "bundle": "rm -Rf dist && parcel build -d dist --public-url / src/html/index.html",
-    "dev": "parcel src/html/index.html",
-    "start": "rm -Rf dist && parcel watch -d dist --public-url / src/html/index.html"
+    "bundle": "rm -Rf dist && parcel build -d dist --public-url / src/main/html/index.html",
+    "dev": "rm -Rf dist && parcel -d dist --public-url / src/main/html/index.html"
   },
   "dependencies": {
     "@uppy/core": "^1.1.0",
