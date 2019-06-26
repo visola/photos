@@ -1,4 +1,7 @@
 locals {
+  frontend_name = "photos-frontend"
+  frontend_port = 80
+
   service_name = "photos-service"
   service_port = 8080
 }
@@ -15,6 +18,24 @@ resource "kubernetes_secret" "tls_certificate" {
 
   type = "kubernetes.io/tls"
 }
+resource "kubernetes_service" "photos_frontend" {
+  metadata {
+    name = local.frontend_name
+  }
+
+  spec {
+    type = "NodePort"
+
+    selector = {
+      app = local.frontend_name
+    }
+
+    port {
+      port        = local.frontend_port
+      target_port = local.frontend_port
+    }
+  }
+}
 
 resource "kubernetes_service" "photos_service" {
   metadata {
@@ -25,7 +46,7 @@ resource "kubernetes_service" "photos_service" {
     type = "NodePort"
 
     selector = {
-      app = "photos-service"
+      app = local.service_name
     }
 
     port {
@@ -49,6 +70,22 @@ resource "kubernetes_ingress" "photos_ingress" {
       http {
         path {
           path = "/*"
+          backend {
+            service_name = local.frontend_name
+            service_port = local.frontend_port
+          }
+        }
+
+        path {
+          path = "/authenticate/*"
+          backend {
+            service_name = local.service_name
+            service_port = local.service_port
+          }
+        }
+
+        path {
+          path = "/api/v1/*"
           backend {
             service_name = local.service_name
             service_port = local.service_port

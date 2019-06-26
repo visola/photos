@@ -1,54 +1,22 @@
-plugins {
-  id "com.moowork.node" version "1.2.0"
-  id 'org.springframework.boot' version '2.1.5.RELEASE'
-}
-
-apply plugin: 'java'
-apply plugin: 'io.spring.dependency-management'
-
-version = "0.1.0"
-
-jar {
-  baseName = 'photos'
-  version = "${project.version}-SNAPSHOT"
-}
-
-repositories {
-  jcenter()
-  mavenLocal()
-  maven { url 'https://repo.spring.io/snapshot' }
-  maven { url 'https://repo.spring.io/milestone' }
-}
-
-dependencies {
-  compileOnly('org.projectlombok:lombok:1.18.2')
-
-  implementation('com.google.cloud:google-cloud-storage:1.74.0')
-  implementation('mysql:mysql-connector-java:8.0.12')
-  implementation('org.apache.httpcomponents:httpclient')
-  implementation('org.flywaydb:flyway-core')
-  implementation('org.jdbi:jdbi3-core:3.4.0')
-  implementation('org.jdbi:jdbi3-sqlobject:3.4.0')
-  implementation('org.springframework.boot:spring-boot-starter-jdbc')
-  implementation('org.springframework.boot:spring-boot-starter-security')
-  implementation('org.springframework.boot:spring-boot-starter-thymeleaf')
-  implementation('org.springframework.boot:spring-boot-starter-web')
-  implementation('org.visola.spring.security:spring-security-token-filter-spring-boot-starter:2.0')
-}
-
-sourceSets {
-  main {
-    resources {
-      srcDir "${buildDir}/frontend"
-    }
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.5.RELEASE'
   }
 }
 
-task bundleFrontend (type: NpmTask) {
-  dependsOn npmInstall
-  args = ["run", "bundle"]
-  inputs.dir file("src/frontend")
-  outputs.dir file("${buildDir}/frontend/static")
-}
+version = "0.1.0"
 
-processResources.dependsOn bundleFrontend
+subprojects {
+  apply plugin: 'java'
+  apply plugin: 'io.spring.dependency-management'
+  apply plugin: 'org.springframework.boot'
+
+  version = rootProject.version
+
+  repositories {
+    mavenCentral()
+  }
+}

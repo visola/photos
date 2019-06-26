@@ -30,8 +30,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     http
         .authorizeRequests()
 
-        // Anything except API endpoints need not to be authenticated
-        .antMatchers("**/*").anonymous()
+        // Health endpoint should be accessible
+        .antMatchers("/actuator/**").anonymous()
 
         // All Others API calls will be secure
         .antMatchers(baseApiPath + "/**").authenticated();

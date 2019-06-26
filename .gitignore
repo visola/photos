@@ -1,10 +1,10 @@
-/application.yml
-/application-*.yml
+application-*.yml
 bin/
 build/
 .cache/
 .classpath
 credentials.json
+dist/
 .gradle/
 .idea/
 *.iml
@@ -12,6 +12,7 @@ letsencrypt/**
 node_modules/
 out/
 *.pem
+photos-*/application.yml
 .project
 .settings/
 .terraform
