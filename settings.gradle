@@ -1,4 +1,5 @@
 rootProject.name = 'photos'
 
 include 'photos-common'
+include 'photos-data'
 include 'photos-service'
