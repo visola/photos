@@ -1,7 +1,16 @@
-dependencies {
-  annotationProcessor('org.projectlombok:lombok:1.18.8')
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.springframework.boot:spring-boot-gradle-plugin:${spring_boot_version}"
+  }
+}
 
-  compileOnly('org.projectlombok:lombok:1.18.8')
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+  implementation project(':photos-common')
 
   implementation('com.google.cloud:google-cloud-storage:1.74.0')
   implementation('com.nimbusds:nimbus-jose-jwt:5.8')

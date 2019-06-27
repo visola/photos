@@ -19,7 +19,7 @@ if [ -z "$2" ]; then
 fi
 
 GIT_SHA=$(git rev-parse --short HEAD)
-VERSION=$(./gradlew properties | grep version | awk '{ print $2 }')
+VERSION=$(./gradlew properties | grep '^version:' | awk '{ print $2 }')
 
 PROJECT=$1
 ENVIRONMENT=$2

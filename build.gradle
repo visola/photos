@@ -3,20 +3,23 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.5.RELEASE'
+    classpath "io.spring.gradle:dependency-management-plugin:${spring_dependency_management_plugin}"
   }
 }
 
-version = "0.1.0"
+version = '0.1.0'
 
 subprojects {
   apply plugin: 'java'
   apply plugin: 'io.spring.dependency-management'
-  apply plugin: 'org.springframework.boot'
 
   version = rootProject.version
 
   repositories {
     mavenCentral()
+  }
+
+  dependencyManagement {
+    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${spring_boot_version}") }
   }
 }
