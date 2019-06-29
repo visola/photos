@@ -1,0 +1,8 @@
+dependencies {
+  implementation project(':photos-common')
+
+  implementation('org.jdbi:jdbi3-core:3.4.0')
+  implementation('org.jdbi:jdbi3-sqlobject:3.4.0')
+  implementation('org.springframework:spring-context')
+  implementation('org.springframework:spring-jdbc')
+}
