@@ -1,5 +1,5 @@
 resource "google_storage_bucket" "image_store" {
-  name     = "photos-vinnie-${var.environment}"
+  name     = "uploads-vinnie-${var.environment}"
   location = var.region
   force_destroy = true
 
@@ -11,7 +11,7 @@ resource "google_storage_bucket" "image_store" {
 }
 
 resource "google_storage_bucket" "thumbnail_store" {
-  name     = "photos-vinnie-${var.environment}-thumbnails"
+  name     = "uploads-vinnie-${var.environment}-thumbnails"
   location = var.region
   force_destroy = true
 

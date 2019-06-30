@@ -5,12 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 @Data
-public class Photo {
+public class Upload {
 
   private long id;
   private long userId;
   private String hash;
   private String name;
+  private String mime;
   private long size;
   private long uploadedAt;
 

@@ -7,7 +7,7 @@ import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
-import org.visola.photos.dao.PhotoDao;
+import org.visola.photos.dao.UploadDao;
 import org.visola.photos.dao.UserDao;
 
 @Configuration
@@ -21,8 +21,8 @@ public class JDBIConfiguration {
   }
 
   @Bean
-  public PhotoDao photoDao(Jdbi jdbi) {
-    return jdbi.onDemand(PhotoDao.class);
+  public UploadDao photoDao(Jdbi jdbi) {
+    return jdbi.onDemand(UploadDao.class);
   }
 
   @Bean
