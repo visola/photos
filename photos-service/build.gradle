@@ -13,7 +13,7 @@ dependencies {
   implementation project(':photos-common')
   implementation project(':photos-data')
 
-  implementation('com.google.cloud:google-cloud-storage:1.74.0')
+  implementation("${dep_google_cloud_storage}")
   implementation('com.nimbusds:nimbus-jose-jwt:5.8')
   implementation('mysql:mysql-connector-java:8.0.12')
   implementation('org.apache.httpcomponents:httpclient')
