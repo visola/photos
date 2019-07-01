@@ -30,7 +30,7 @@ import com.google.cloud.storage.Storage;
 import com.google.common.hash.Hashing;
 import com.google.common.io.ByteStreams;
 
-@RequestMapping("${api.base.path}/photos")
+@RequestMapping("${api.base.path}/uploads")
 @Controller
 public class UploadController {
 
