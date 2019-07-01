@@ -13,5 +13,10 @@ dependencies {
   implementation project(':photos-common')
   implementation project(':photos-data')
 
+  implementation("${dep_google_cloud_storage}")
+  implementation('mysql:mysql-connector-java:8.0.12')
+  implementation('org.flywaydb:flyway-core')
+  implementation('org.springframework.boot:spring-boot-starter-actuator')
+  implementation('org.springframework.boot:spring-boot-starter-jdbc')
   implementation('org.springframework.boot:spring-boot-starter-web')
 }

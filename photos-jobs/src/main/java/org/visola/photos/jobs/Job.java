@@ -1,4 +1,4 @@
-package org.visola.photos.jobs.job;
+package org.visola.photos.jobs;
 
 public interface Job {
 

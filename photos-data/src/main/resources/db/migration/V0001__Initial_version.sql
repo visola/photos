@@ -13,3 +13,13 @@ CREATE TABLE upload (
   hash VARCHAR(256) NOT NULL,
   mime VARCHAR(256) NOT NULL
 );
+
+CREATE TABLE thumbnail (
+  id BIGINT PRIMARY KEY,
+  user_id BIGINT NOT NULL REFERENCES user(id),
+  size BIGINT NOT NULL,
+  created_at BIGINT NOT NULL,
+  path VARCHAR(256) NOT NULL,
+  hash VARCHAR(256) NOT NULL,
+  mime VARCHAR(256) NOT NULL
+);
