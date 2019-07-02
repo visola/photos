@@ -4,8 +4,9 @@ import { action, computed, observable } from 'mobx';
 export default class Collection {
   @observable data = [];
   @observable error = null;
-  @observable loading = false;
+  @observable loading = 0;
   @observable saving = false;
+  @observable ids = {};
 
   get baseApi() {
     throw new Error('No base API defined');
@@ -14,6 +15,7 @@ export default class Collection {
   @action
   addOne(datum) {
     this.data.push(datum);
+    this.ids[datum.id] = datum;
   }
 
   @action
@@ -32,19 +34,39 @@ export default class Collection {
     return this.data.filter(callback);
   }
 
+  @action
   fetch() {
-    this.loading = true;
+    this.loading++;
     return axios.get(this.baseApi)
       .then((response) => {
         this.setData(response.data);
-        this.loading = false;
+        this.loading--;
         return this;
       })
       .catch((error) => this.handleError(error));
   }
 
+  @action
+  fetchById(id) {
+    if (this.ids[id]) {
+      return Promise.resolve(this.findById(id));
+    }
+
+    this.loading++;
+    return axios.get(`${this.baseApi}/${id}`)
+      .then((response) => {
+        this.addOne(response.data);
+        this.loading--;
+        return response.data;
+      }).catch((error) => this.handleError(error));
+  }
+
   findById(id) {
-    return this.data.find((d) => d.id == id);
+    return this.ids[id];
+  }
+
+  forEach(callback) {
+    return this.data.forEach(callback);
   }
 
   @computed
@@ -60,7 +82,7 @@ export default class Collection {
   @action
   handleError(error) {
     this.error = error;
-    this.loading = false;
+    this.loading--;
     this.saving = false;
   }
 
@@ -96,5 +118,6 @@ export default class Collection {
   @action
   setData(newData) {
     this.data = newData;
+    newData.forEach(d => this.ids[d.id] = d);
   }
 }

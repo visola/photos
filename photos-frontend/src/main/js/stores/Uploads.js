@@ -3,7 +3,7 @@ import Collection from './Collection';
 import Uppy from '@uppy/core';
 import XHRUpload from '@uppy/xhr-upload';
 
-export default class Photos extends Collection {
+export default class Uploads extends Collection {
   constructor(security) {
     super();
     this.security = security;
