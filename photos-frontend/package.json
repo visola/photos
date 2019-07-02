@@ -27,7 +27,8 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "less": "^3.9.0",
-    "parcel-bundler": "^1.12.3"
+    "parcel-bundler": "^1.12.3",
+    "parcel-plugin-asset-copier": "1.0.0"
   },
   "babel": {
     "presets": [
@@ -39,5 +40,6 @@
       "transform-decorators-legacy",
       "transform-class-properties"
     ]
-  }
+  },
+  "assetsPath": "static/"
 }

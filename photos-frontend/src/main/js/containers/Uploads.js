@@ -3,7 +3,7 @@ import { DragDrop } from '@uppy/react';
 import { inject, observer } from 'mobx-react';
 import React from 'react';
 
-@inject('security', 'uploads')
+@inject('security', 'uploads', 'thumbnails')
 @observer
 export default class Uploads extends React.Component {
   constructor(props) {
@@ -14,7 +14,19 @@ export default class Uploads extends React.Component {
   }
 
   componentWillMount() {
-    this.props.uploads.fetch();
+    this.props.uploads.fetch()
+      .then(() => {
+        this.props.uploads.forEach((u) => {
+          const timerId = setInterval(() => {
+            this.props.thumbnails.fetchById(u.id)
+              .then((d) => {
+                if (d) {
+                  clearInterval(timerId);
+                }
+              });
+          }, 1000);
+        });
+      });
     this.props.uploads.uppy.on('upload-success', this.handleUploadSuccess);
   }
 
@@ -41,15 +53,20 @@ export default class Uploads extends React.Component {
   }
 
   renderPhotos() {
-    if (this.props.uploads.loading) {
+    if (this.props.uploads.loading > 0) {
       return <Loader />
     }
 
     const { token } = this.props.security;
+    const { thumbnails } = this.props;
 
     return <div className="image-previews">
       {this.props.uploads.map((p) => {
-        return <img src={`/api/v1/thumbnails/${p.id}?auth=${token}`} key={p.id} />
+        if (thumbnails.findById(p.id)) {
+          return <img src={`/api/v1/thumbnails/${p.id}?auth=${token}`} key={p.id} />;
+        }
+
+        return <img src="empty-image.png" key={p.id} />;
       })}
     </div>;
   }
