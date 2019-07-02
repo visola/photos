@@ -1,7 +1,6 @@
 package org.visola.photos.controllers;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
@@ -12,83 +11,51 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.visola.photos.dao.PhotoDao;
+import org.visola.photos.dao.UploadDao;
 import org.visola.photos.model.Page;
-import org.visola.photos.model.Photo;
+import org.visola.photos.model.Upload;
 import org.visola.photos.model.User;
 
-import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.common.hash.Hashing;
-import com.google.common.io.ByteStreams;
 
-@RequestMapping("${api.base.path}/photos")
+@RequestMapping("${api.base.path}/uploads")
 @Controller
-public class PhotoController {
+public class UploadController {
 
   private final String bucketName;
-  private final PhotoDao photoDao;
+  private final UploadDao uploadDao;
   private final Storage storage;
-  private final String thumbnailsBucketName;
 
-  private final byte[] emptyImage;
-
-  public PhotoController(
-      @Value("${photos.bucket.name}") String bucketName,
-      @Value("${photos.bucket.thumbnails}") String thumbnailsBucketName,
-      PhotoDao photoDao,
+  public UploadController(
+      @Value("${uploads.bucket.name}") String bucketName,
+      UploadDao uploadDao,
       Storage storage) throws IOException {
     this.bucketName = bucketName;
-    this.photoDao = photoDao;
+    this.uploadDao = uploadDao;
     this.storage = storage;
-    this.thumbnailsBucketName = thumbnailsBucketName;
-
-    emptyImage = ByteStreams.toByteArray(
-        this.getClass().getClassLoader().getResourceAsStream("empty-image.png")
-    );
-  }
-
-  @GetMapping("/{photoId}/thumbnail")
-  public void downloadThumbnail(
-      @PathVariable long photoId,
-      OutputStream output,
-      @AuthenticationPrincipal User user)
-      throws IOException {
-    Optional<Photo> maybePhoto = photoDao.findById(photoId, user.getId());
-    if (!maybePhoto.isPresent()) {
-      throw new NotFoundException("Image not found with ID: " + photoId);
-    }
-
-    Blob blob = storage.get(BlobId.of(thumbnailsBucketName, maybePhoto.get().getPath()));
-    if (blob == null) {
-      output.write(emptyImage);
-      return;
-    }
-
-    output.write(blob.getContent());
   }
 
   @GetMapping
   @ResponseBody
-  public ResponseEntity<?> getPhotos(
+  public ResponseEntity<?> getUploads(
       @RequestParam(required = false, defaultValue = "1") int pageNumber,
       @RequestParam(required = false, defaultValue = "100") int pageSize,
       @AuthenticationPrincipal User user) {
 
-    List<Photo> data = photoDao.fetchPage(user.getId(), (pageNumber - 1) * pageSize, pageSize);
-    Page<Photo> page = new Page<>();
+    List<Upload> data = uploadDao.fetchPageByUserId(user.getId(), (pageNumber - 1) * pageSize, pageSize);
+    Page<Upload> page = new Page<>();
     page.setNumber(pageNumber);
     page.setSize(pageSize);
     page.setData(data);
-    page.setTotalElements(photoDao.countPhotos(user.getId()));
+    page.setTotalElements(uploadDao.countUploads(user.getId()));
 
     return ResponseEntity.ok(page);
   }
@@ -100,34 +67,35 @@ public class PhotoController {
     byte[] bytes = file.getBytes();
     String hash = Hashing.sha256().hashBytes(bytes).toString();
 
-    Optional<Photo> maybePhoto = photoDao.findByHash(hash, user.getId());
+    Optional<Upload> maybePhoto = uploadDao.findByHash(hash, user.getId());
     if (maybePhoto.isPresent()) {
       return ResponseEntity.ok(maybePhoto.get());
     }
 
-    Photo photo = new Photo();
-    photo.setName(file.getOriginalFilename());
-    photo.setSize(file.getSize());
-    photo.setUploadedAt(System.currentTimeMillis());
-    photo.setUserId(user.getId());
+    Upload upload = new Upload();
+    upload.setName(file.getOriginalFilename());
+    upload.setMime(file.getContentType());
+    upload.setSize(file.getSize());
+    upload.setUploadedAt(System.currentTimeMillis());
+    upload.setUserId(user.getId());
 
     String path = Hashing.sha256()
         .hashString(
-            String.format("%s-%d", photo.getName(), photo.getUploadedAt()),
+            String.format("%s-%d", upload.getName(), upload.getUploadedAt()),
             StandardCharsets.UTF_8)
         .toString();
 
-    photo.setPath(path);
-    photo.setHash(hash);
-    photo.setId(photoDao.create(photo));
+    upload.setPath(path);
+    upload.setHash(hash);
+    upload.setId(uploadDao.create(upload));
 
-    BlobId blobId = BlobId.of(bucketName, photo.getPath());
+    BlobId blobId = BlobId.of(bucketName, upload.getPath());
     BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
         .setContentType(file.getContentType())
         .build();
     storage.create(blobInfo, bytes);
 
-    return ResponseEntity.ok(photo);
+    return ResponseEntity.ok(upload);
   }
 
 }

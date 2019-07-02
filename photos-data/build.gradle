@@ -1,6 +1,7 @@
 dependencies {
   implementation project(':photos-common')
 
+  implementation("${dep_google_cloud_storage}")
   implementation('org.jdbi:jdbi3-core:3.4.0')
   implementation('org.jdbi:jdbi3-sqlobject:3.4.0')
   implementation('org.springframework:spring-context')

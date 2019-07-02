@@ -15,7 +15,7 @@ export default class Photos extends Collection {
   }
 
   get baseApi() {
-    return '/api/v1/photos';
+    return '/api/v1/uploads';
   }
 
   initializeUppy() {
@@ -30,7 +30,7 @@ export default class Photos extends Collection {
       XHRUpload,
       {
         bundle: false,
-        endpoint: '/api/v1/photos',
+        endpoint: '/api/v1/uploads',
         fieldName: 'file',
         headers: { Authorization: `Bearer ${this.security.token}` },
         timeout: 0,

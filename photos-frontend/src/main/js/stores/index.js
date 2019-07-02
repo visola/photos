@@ -1,12 +1,12 @@
-import Photos from './Photos';
+import Uploads from './Uploads';
 import Security from './Security';
 
 const security = new Security();
-const photos = new Photos(security);
+const uploads = new Uploads(security);
 
 security.checkLoggedIn();
 
 export default {
-  photos,
   security,
+  uploads,
 };

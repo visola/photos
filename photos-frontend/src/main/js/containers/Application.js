@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import Login from './Login';
-import Photos from './Photos';
+import Uploads from './Uploads';
 import TopMenu from './TopMenu';
 
 @inject('security')
@@ -23,8 +23,8 @@ export default class Application extends React.Component {
       <React.Fragment>
         <TopMenu />
         <div id="content">
-          <Route exact path="/" component={Photos} />
-          <Route exact path="/photos" component={Photos} />
+          <Route exact path="/" component={Uploads} />
+          <Route exact path="/uploads" component={Uploads} />
         </div>
       </React.Fragment>
     </BrowserRouter>;
