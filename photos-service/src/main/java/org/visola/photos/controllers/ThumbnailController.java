@@ -49,4 +49,12 @@ public class ThumbnailController {
     output.write(storage.get(BlobId.of(thumbnailsBucketName, maybeThumbnail.get().getPath())).getContent());
   }
 
+  @GetMapping(value = "/{uploadId}", produces = MimeTypeUtils.APPLICATION_JSON_VALUE)
+  public Optional<Thumbnail> findThumbnail(
+      @PathVariable long uploadId,
+      OutputStream output,
+      @AuthenticationPrincipal User user)
+      throws IOException {
+    return thumbnailDao.findById(uploadId, user.getId());
+  }
 }
