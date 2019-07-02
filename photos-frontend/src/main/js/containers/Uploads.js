@@ -49,7 +49,7 @@ export default class Uploads extends React.Component {
 
     return <div className="image-previews">
       {this.props.uploads.map((p) => {
-        return <img src={`/api/v1/uploads/${p.id}/thumbnail?auth=${token}`} key={p.id} />
+        return <img src={`/api/v1/thumbnails/${p.id}?auth=${token}`} key={p.id} />
       })}
     </div>;
   }

@@ -1,6 +1,7 @@
 package org.visola.photos.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
@@ -16,6 +17,10 @@ public interface ThumbnailDao {
   @SqlUpdate("INSERT INTO thumbnail (id, hash, path, size, mime, created_at, user_id)"
       + " VALUES (:id, :hash, :path, :size, :mime, :createdAt, :userId)")
   void create(@BindBean Thumbnail thumbnail);
+
+  @RegisterBeanMapper(Thumbnail.class)
+  @SqlQuery("SELECT * FROM thumbnail WHERE id = :id AND user_id = :userId")
+  Optional<Thumbnail> findById(@Bind("id") long id, @Bind("userId") long userId);
 
   @RegisterBeanMapper(Upload.class)
   @SqlQuery("SELECT u.* FROM upload u" +

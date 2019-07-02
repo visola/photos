@@ -1,7 +1,6 @@
 package org.visola.photos.controllers;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +11,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,12 +21,10 @@ import org.visola.photos.model.Page;
 import org.visola.photos.model.Upload;
 import org.visola.photos.model.User;
 
-import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
 import com.google.common.hash.Hashing;
-import com.google.common.io.ByteStreams;
 
 @RequestMapping("${api.base.path}/uploads")
 @Controller
@@ -37,43 +33,14 @@ public class UploadController {
   private final String bucketName;
   private final UploadDao uploadDao;
   private final Storage storage;
-  private final String thumbnailsBucketName;
-
-  private final byte[] emptyImage;
 
   public UploadController(
       @Value("${uploads.bucket.name}") String bucketName,
-      @Value("${uploads.bucket.thumbnails}") String thumbnailsBucketName,
       UploadDao uploadDao,
       Storage storage) throws IOException {
     this.bucketName = bucketName;
     this.uploadDao = uploadDao;
     this.storage = storage;
-    this.thumbnailsBucketName = thumbnailsBucketName;
-
-    emptyImage = ByteStreams.toByteArray(
-        this.getClass().getClassLoader().getResourceAsStream("empty-image.png")
-    );
-  }
-
-  @GetMapping("/{uploadId}/thumbnail")
-  public void downloadThumbnail(
-      @PathVariable long uploadId,
-      OutputStream output,
-      @AuthenticationPrincipal User user)
-      throws IOException {
-    Optional<Upload> maybeUpload = uploadDao.findById(uploadId, user.getId());
-    if (!maybeUpload.isPresent()) {
-      throw new NotFoundException("Upload not found with ID: " + uploadId);
-    }
-
-    Blob blob = storage.get(BlobId.of(thumbnailsBucketName, maybeUpload.get().getPath()));
-    if (blob == null) {
-      output.write(emptyImage);
-      return;
-    }
-
-    output.write(blob.getContent());
   }
 
   @GetMapping

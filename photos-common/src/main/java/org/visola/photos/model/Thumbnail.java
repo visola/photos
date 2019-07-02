@@ -9,10 +9,12 @@ public class Thumbnail {
 
   private long id;
   private long userId;
-  private String hash;
   private String mime;
   private long size;
   private long createdAt;
+
+  @JsonIgnore
+  private String hash;
 
   @JsonIgnore
   private String path;
