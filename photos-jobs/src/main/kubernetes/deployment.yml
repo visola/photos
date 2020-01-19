@@ -1,29 +1,30 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: photos-service
+  name: photos-jobs
   namespace: photos
   labels:
-    app: photos-service
+    app: photos-jobs
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: photos-service
+      app: photos-jobs
   template:
     metadata:
       labels:
-        app: photos-service
+        app: photos-jobs
         gitSha: GIT_SHA
     spec:
       volumes:
         - name: secret-volume
           secret:
-            secretName: photos-service
+            secretName: photos-jobs
       containers:
-        - name: photos-service-image
+        - name: photos-jobs-image
           image: DOCKER_IMAGE
           imagePullPolicy: Always
+          args: [ "--photos-post-processor" ]
           ports:
             - containerPort: 8080
           volumeMounts:
