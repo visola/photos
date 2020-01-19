@@ -1,5 +1,14 @@
 #!/bin/bash
 
+deploy_to_kubernetes() {
+  project_name=$1
+  publish_docker_image=gcr.io/$GCP_PROJECT_ID/$project_name/$GIT_SHA
+
+  sed "s%DOCKER_IMAGE%$publish_docker_image%" photos-service/src/main/kubernetes/deployment.yml | \
+    sed "s%GIT_SHA%$GIT_SHA%" | \
+    kubectl apply -f -
+}
+
 publish_docker_image() {
   project_name=$1
   docker_image=$project_name:latest
@@ -28,7 +37,7 @@ main() {
   publish_docker_image 'photos-jobs'
   publish_docker_image 'photos-service'
 
-  # TODO - Deploy to kubernetes
+  deploy_to_kubernetes 'photos-service'
 }
 
 usage() {
