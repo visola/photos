@@ -30,6 +30,8 @@ import com.google.common.hash.Hashing;
 @Controller
 public class UploadController {
 
+  private static final int MAX_PAGE_SIZE = 100;
+
   private final String bucketName;
   private final UploadDao uploadDao;
   private final Storage storage;
@@ -47,8 +49,12 @@ public class UploadController {
   @ResponseBody
   public ResponseEntity<?> getUploads(
       @RequestParam(required = false, defaultValue = "1") int pageNumber,
-      @RequestParam(required = false, defaultValue = "100") int pageSize,
+      @RequestParam(required = false, defaultValue = "50") int pageSize,
       @AuthenticationPrincipal User user) {
+
+    if (pageSize > MAX_PAGE_SIZE) {
+      return ResponseEntity.badRequest().body("Max page size is " + MAX_PAGE_SIZE);
+    }
 
     List<Upload> data = uploadDao.fetchPageByUserId(user.getId(), (pageNumber - 1) * pageSize, pageSize);
     Page<Upload> page = new Page<>();
