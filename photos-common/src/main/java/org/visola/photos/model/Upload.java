@@ -13,6 +13,7 @@ public class Upload {
   private String mime;
   private long size;
   private long uploadedAt;
+  private boolean thumbnailAvailable;
 
   @JsonIgnore
   private String hash;

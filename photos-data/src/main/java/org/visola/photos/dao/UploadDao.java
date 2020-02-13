@@ -23,8 +23,9 @@ public interface UploadDao {
   long create(@BindBean Upload upload);
 
   @RegisterBeanMapper(Upload.class)
-  @SqlQuery("SELECT *"
-      + " FROM upload"
+  @SqlQuery("SELECT *,"
+      + " EXISTS (SELECT 1 FROM thumbnail WHERE id = u.id) AS thumbnailAvailable"
+      + " FROM upload u"
       + " WHERE user_id = :userId"
       + " ORDER BY uploaded_at DESC"
       + " LIMIT :pageSize"
