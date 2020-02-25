@@ -11,7 +11,7 @@ install_gcp_tools() {
   google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=google-key.json
 
   # Login to Docker
-  google-cloud-sdk/bin/gcloud auth configure-docker
+  google-cloud-sdk/bin/gcloud auth configure-docker --quiet
 }
 
 publish_docker_image() {
