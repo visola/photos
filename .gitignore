@@ -5,6 +5,7 @@ build/
 .classpath
 credentials.json
 dist/
+google-key.json
 .gradle/
 .idea/
 *.iml

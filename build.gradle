@@ -7,7 +7,12 @@ buildscript {
   }
 }
 
-version = '0.1.0'
+def versionFile = new File('.version')
+if (versionFile.exists()) {
+  version = versionFile.text
+} else {
+  throw new RuntimeException("No .version file found.")
+}
 
 subprojects {
   apply plugin: 'java'
