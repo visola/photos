@@ -1,24 +1,6 @@
 #!/bin/bash
 set -e
 
-install_gcp_tools() {
-  project_name=$1
-
-  # Download gcloud tools and set it up
-  curl -o gcp-script.sh https://sdk.cloud.google.com
-  chmod +x gcp-script.sh
-  ./gcp-script.sh --install-dir=$(pwd) --disable-prompts
-  gcloud components install docker-credential-gcr
-
-  # Setup credentials
-  openssl aes-256-cbc -K $encrypted_bc40a34dabb2_key -iv $encrypted_bc40a34dabb2_iv -in google-key.json.enc -out google-key.json -d
-  google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=google-key.json
-  gcloud config set project $project_name
-
-  # Login to Docker
-  google-cloud-sdk/bin/gcloud auth configure-docker --quiet
-}
-
 publish_docker_image() {
   project_name=$1
   docker_image=$project_name:$VERSION
@@ -40,7 +22,9 @@ main() {
   echo "Version: '$VERSION'"
   echo "GCP Project: '$GCP_PROJECT_ID'"
 
-  install_gcp_tools $GCP_PROJECT_ID
+  # Login to Docker
+  openssl aes-256-cbc -K $encrypted_bc40a34dabb2_key -iv $encrypted_bc40a34dabb2_iv -in google-key.json.enc -out google-key.json -d
+  cat google-key.json | docker login -u _json_key --password-stdin https://gcr.io
 
   publish_docker_image 'photos-jobs'
   publish_docker_image 'photos-service'
