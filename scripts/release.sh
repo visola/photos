@@ -1,6 +1,9 @@
 #!/bin/bash
+set -e
 
 install_gcp_tools() {
+  project_name=$1
+
   # Download gcloud tools and set it up
   curl -o gcp-script.sh https://sdk.cloud.google.com
   chmod +x gcp-script.sh
@@ -9,6 +12,7 @@ install_gcp_tools() {
   # Setup credentials
   openssl aes-256-cbc -K $encrypted_bc40a34dabb2_key -iv $encrypted_bc40a34dabb2_iv -in google-key.json.enc -out google-key.json -d
   google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=google-key.json
+  gcloud config set project $project_name
 
   # Login to Docker
   google-cloud-sdk/bin/gcloud auth configure-docker --quiet
@@ -35,17 +39,12 @@ main() {
   echo "Version: '$VERSION'"
   echo "GCP Project: '$GCP_PROJECT_ID'"
 
-  if [ "$TRAVIS_BRANCH" != "master" ]; then
-    echo "Not in master branch, exiting..."
-    exit 0
-  fi
-
-  install_gcp_tools
+  install_gcp_tools $GCP_PROJECT_ID
 
   publish_docker_image 'photos-jobs'
   publish_docker_image 'photos-service'
 
-  scripts/semantic-release --token $GITHUB_TOKEN -slug VinnieApps/photos
+  scripts/semantic-release -slug VinnieApps/photos
 }
 
 usage() {
@@ -60,4 +59,9 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-main $1
+if [ "$TRAVIS_BRANCH" == "master" ]; then
+  main $1
+else
+  echo "Not in master branch, exiting..."
+  exit 0
+fi
