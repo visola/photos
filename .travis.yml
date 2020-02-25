@@ -3,10 +3,6 @@ language: java
 services:
   - docker
 
-before_script:
-  # Generate new version but no release yet
-  - scripts/semantic-release --token $GITHUB_TOKEN -dry -vf -slug VinnieApps/photos
-
 script:
   - ./scripts/build.sh
 

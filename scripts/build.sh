@@ -11,6 +11,9 @@ build_docker_image() {
 }
 
 main() {
+  # Try to generate semantic version
+  scripts/semantic-release --token $GITHUB_TOKEN -dry -vf -slug VinnieApps/photos
+
   GIT_SHA=$(git rev-parse --short HEAD)
   VERSION=$(cat .version)
 
