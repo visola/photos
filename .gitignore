@@ -20,4 +20,5 @@ photos-*/application.yml
 .terraform.*
 terraform.tfvars
 terraform.tfstate*
+.version
 .vscode/

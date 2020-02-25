@@ -11,7 +11,7 @@ def versionFile = new File('.version')
 if (versionFile.exists()) {
   version = versionFile.text
 } else {
-  throw new RuntimeException("No .version file found.")
+  version = "0.0.0"
 }
 
 subprojects {
