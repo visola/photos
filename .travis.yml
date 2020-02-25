@@ -5,7 +5,4 @@ services:
 
 script:
   - ./scripts/build.sh
-
-after_success:
-  # Publish Docker images
   - ./scripts/release.sh vinnieapps
