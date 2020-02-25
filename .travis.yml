@@ -8,4 +8,4 @@ script:
 
 after_success:
   # Publish Docker images
-  - ./scripts/release.sh
+  - ./scripts/release.sh vinnieapps
