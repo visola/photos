@@ -29,7 +29,7 @@ main() {
   publish_docker_image 'photos-jobs'
   publish_docker_image 'photos-service'
 
-  scripts/semantic-release -slug VinnieApps/photos
+  scripts/semantic-release -travis-com -slug VinnieApps/photos
 }
 
 usage() {

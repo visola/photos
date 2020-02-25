@@ -15,7 +15,7 @@ main() {
   if [ -z GITHUB_TOKEN ]; then
     echo -n '0.0.0' > .version
   else
-    scripts/semantic-release -noci -dry -vf -slug VinnieApps/photos
+    scripts/semantic-release -travis-com -noci -dry -vf -slug VinnieApps/photos
   fi
 
   GIT_SHA=$(git rev-parse --short HEAD)
