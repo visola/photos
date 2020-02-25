@@ -8,6 +8,7 @@ install_gcp_tools() {
   curl -o gcp-script.sh https://sdk.cloud.google.com
   chmod +x gcp-script.sh
   ./gcp-script.sh --install-dir=$(pwd) --disable-prompts
+  gcloud components install docker-credential-gcr
 
   # Setup credentials
   openssl aes-256-cbc -K $encrypted_bc40a34dabb2_key -iv $encrypted_bc40a34dabb2_iv -in google-key.json.enc -out google-key.json -d
