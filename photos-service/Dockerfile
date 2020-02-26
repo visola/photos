@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM amazoncorretto:11
 
 ARG JAR_FILE
 
