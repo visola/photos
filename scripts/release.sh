@@ -13,6 +13,13 @@ publish_docker_image() {
   popd >> /dev/null
 }
 
+trigger_deploy_in_dev() {
+  curl -X POST -i \
+    -H "Authorization: token ${GITHUB_TOKEN}" \
+    -d '{"event_type":"photos_backend_build_success"}' \
+    https://api.github.com/repos/VinnieApps/vinnieapps-infrastructure/dispatches
+}
+
 main() {
   GIT_SHA=$(git rev-parse --short HEAD)
   VERSION=$(cat .version)
@@ -30,6 +37,8 @@ main() {
   publish_docker_image 'photos-service'
 
   scripts/semantic-release -travis-com -slug VinnieApps/photos
+
+  trigger_deploy_in_dev
 }
 
 usage() {
