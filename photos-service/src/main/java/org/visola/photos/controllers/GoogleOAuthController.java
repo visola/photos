@@ -82,6 +82,8 @@ public class GoogleOAuthController {
     String csrfToken = UUID.randomUUID().toString();
     response.addCookie(createCsrfTokenCookie(csrfToken, (int) TimeUnit.MINUTES.toMillis(1)));
 
+    String redirectUri = maybeRedirectUrl.orElse(this.redirectUri);
+
     StringBuffer uri = new StringBuffer("redirect:");
     uri.append(GOOGLE_OAUTH_ENDPOINT);
     uri.append("?response_type=code&scope=");
@@ -89,11 +91,11 @@ public class GoogleOAuthController {
     uri.append("&client_id=");
     uri.append(URLEncoder.encode(clientId, UTF8));
     uri.append("&redirect_uri=");
-    uri.append(URLEncoder.encode(maybeRedirectUrl.orElse(redirectUri), UTF8));
+    uri.append(URLEncoder.encode(redirectUri, UTF8));
 
     // In the state we send the CSRF token
     uri.append("&state=");
-    uri.append(URLEncoder.encode(String.format("%s", csrfToken), UTF8));
+    uri.append(URLEncoder.encode(String.format("%s|%s", csrfToken, redirectUri), UTF8));
 
     return uri.toString();
   }
@@ -107,12 +109,16 @@ public class GoogleOAuthController {
     // Remove CSRF token
     response.addCookie(createCsrfTokenCookie(null, 0));
 
+    String [] stateSplit = state.split("\\|");
+    String stateCsrf = stateSplit[0];
+    String redirectedUri = stateSplit[1];
+
     // State stores CSRF token
-    if (!csrfToken.equals(state)) {
+    if (!csrfToken.equals(stateCsrf)) {
       throw new AccessDeniedException("Invalid CSRF token.");
     }
 
-    String email = getUserEmail(getToken(code));
+    String email = getUserEmail(getToken(code, redirectedUri));
     org.visola.photos.model.User user = null;
     Optional<org.visola.photos.model.User> maybeUser = userDao.findByEmail(email);
     if (maybeUser.isPresent()) {
@@ -140,7 +146,7 @@ public class GoogleOAuthController {
     return node.get("email").asText();
   }
 
-  private String getToken(String code) throws Exception {
+  private String getToken(String code, String redirectUri) throws Exception {
     List<NameValuePair> formParams = new ArrayList<>();
     formParams.add(new BasicNameValuePair("code", code));
     formParams.add(new BasicNameValuePair("client_id", clientId));
