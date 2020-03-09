@@ -29,6 +29,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.visola.photos.dao.UserDao;
 import org.visola.photos.security.UserAuthentication;
@@ -74,7 +75,9 @@ public class GoogleOAuthController {
   }
 
   @RequestMapping(method= RequestMethod.GET, value="/authenticate/google")
-  public String redirectToGoogle(HttpServletResponse response) throws UnsupportedEncodingException {
+  public String redirectToGoogle(@RequestParam("redirectUrl") Optional<String> maybeRedirectUrl,
+                                 HttpServletResponse response)  throws UnsupportedEncodingException {
+
     // Set CSRF token
     String csrfToken = UUID.randomUUID().toString();
     response.addCookie(createCsrfTokenCookie(csrfToken, (int) TimeUnit.MINUTES.toMillis(1)));
@@ -86,7 +89,7 @@ public class GoogleOAuthController {
     uri.append("&client_id=");
     uri.append(URLEncoder.encode(clientId, UTF8));
     uri.append("&redirect_uri=");
-    uri.append(URLEncoder.encode(redirectUri, UTF8));
+    uri.append(URLEncoder.encode(maybeRedirectUrl.orElse(redirectUri), UTF8));
 
     // In the state we send the CSRF token
     uri.append("&state=");
