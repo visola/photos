@@ -18,10 +18,7 @@ main() {
     scripts/semantic-release -travis-com -noci -dry -vf -slug VinnieApps/photos
   fi
 
-  GIT_SHA=$(git rev-parse --short HEAD)
   VERSION=$(cat .version)
-
-  echo "Git SHA: '$GIT_SHA'"
   echo "Version: '$VERSION'"
 
   echo "Building..."

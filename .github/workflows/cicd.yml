@@ -1,0 +1,44 @@
+name: Continuous Integration/Delivery
+on: push
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+          with:
+            fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+          java-package: jdk
+          architecture: x64
+
+      - name: Fetch CI/CD Tool
+          run: |
+            curl -L -o cicd.zip https://github.com/VinnieApps/cicd-toolbox/releases/latest/download/cicd_linux_amd64.zip \
+              && unzip -d cicd-dir cicd.zip \
+              && cp cicd-dir/cicd cicd
+
+      - name: Calculate Next Version
+        run: |
+          ./cicd semantic-release version-file vinnieapps/photos
+          cat .version
+
+      - name: Gradle Build
+        run: ./gradlew -i build
+
+      - name: Release Jar
+        if: github.ref == 'refs/heads/main'
+        run: |
+          VERSION=$(cat .version)
+
+          ./cicd semantic-release publish-release vinnieapps/photos \
+            --github-token ${{ secrets.GITHUB_TOKEN }} \
+            --upload photos-service/build/libs/photos-service-${VERSION}.jar \
+            --upload photos-jobs/build/libs/photos-jobs-${VERSION}.jar \

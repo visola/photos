@@ -1,8 +1,0 @@
-language: java
-
-services:
-  - docker
-
-script:
-  - ./scripts/build.sh
-  - ./scripts/release.sh vinnieapps
