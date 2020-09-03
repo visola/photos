@@ -20,10 +20,10 @@ jobs:
           architecture: x64
 
       - name: Fetch CI/CD Tool
-          run: |
-            curl -L -o cicd.zip https://github.com/VinnieApps/cicd-toolbox/releases/latest/download/cicd_linux_amd64.zip \
-              && unzip -d cicd-dir cicd.zip \
-              && cp cicd-dir/cicd cicd
+        run: |
+          curl -L -o cicd.zip https://github.com/VinnieApps/cicd-toolbox/releases/latest/download/cicd_linux_amd64.zip \
+            && unzip -d cicd-dir cicd.zip \
+            && cp cicd-dir/cicd cicd
 
       - name: Calculate Next Version
         run: |
