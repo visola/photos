@@ -21,13 +21,13 @@ jobs:
 
       - name: Fetch CI/CD Tool
         run: |
-          curl -L -o cicd.zip https://github.com/VinnieApps/cicd-toolbox/releases/latest/download/cicd_linux_amd64.zip \
+          curl -L -o cicd.zip https://github.com/visola/cicd-toolbox/releases/latest/download/cicd_linux_amd64.zip \
             && unzip -d cicd-dir cicd.zip \
             && cp cicd-dir/cicd cicd
 
       - name: Calculate Next Version
         run: |
-          ./cicd semantic-release version-file vinnieapps/photos
+          ./cicd semantic-release version-file visola/photos
           cat .version
 
       - name: Gradle Build
@@ -38,7 +38,7 @@ jobs:
         run: |
           VERSION=$(cat .version)
 
-          ./cicd semantic-release publish-release vinnieapps/photos \
+          ./cicd semantic-release publish-release visola/photos \
             --github-token ${{ secrets.GITHUB_TOKEN }} \
             --upload photos-service/build/libs/photos-service-${VERSION}.jar \
             --upload photos-jobs/build/libs/photos-jobs-${VERSION}.jar \
